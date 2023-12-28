@@ -1,0 +1,3 @@
+﻿  main.cpp
+C:\Foton\Task1\BrightnessSolution\GettingBrightnessValues\main.cpp(12,2): warning C4091: typedef : пропускается слева от "BITMAPFILEHEADER", когда ни одна переменная не объявлена
+  GettingBrightnessValues.vcxproj -> C:\Foton\Task1\BrightnessSolution\x64\Debug\GettingBrightnessValues.exe
