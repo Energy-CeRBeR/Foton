@@ -1,0 +1,3 @@
+C:/Foton/CMake/Task2/build/CMakeFiles/ImageFlip.dir
+C:/Foton/CMake/Task2/build/CMakeFiles/ALL_BUILD.dir
+C:/Foton/CMake/Task2/build/CMakeFiles/ZERO_CHECK.dir

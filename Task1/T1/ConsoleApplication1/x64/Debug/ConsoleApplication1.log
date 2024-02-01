@@ -1,3 +1,8 @@
 ﻿  ConsoleApplication1.cpp
-C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(32,15): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
-  ConsoleApplication1.vcxproj -> C:\Foton\Task1\T1\x64\Debug\ConsoleApplication1.exe
+C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(38,40): warning C4244: =: преобразование "double" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=float
+          ]
+C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(98,1): error C2760: синтаксическая ошибка: непредвиденный элемент "end of file". Ожидается "<"
+C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(94,42): fatal  error C1075: "{": не найдена несоответствующая лексема

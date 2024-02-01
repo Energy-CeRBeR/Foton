@@ -1,0 +1,10 @@
+^C:\FOTON\CMAKE\TASK2\BUILD\CMAKEFILES\AF452D2D0FF0CCDB282BB070FF15F130\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" -SC:/Foton/CMake/Task2 -BC:/Foton/CMake/Task2/build --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file C:/Foton/CMake/Task2/build/ImageFlip.sln
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
