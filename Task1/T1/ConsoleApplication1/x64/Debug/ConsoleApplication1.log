@@ -1,8 +1,0 @@
-﻿  ConsoleApplication1.cpp
-C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(38,40): warning C4244: =: преобразование "double" в "_Ty", возможна потеря данных
-          with
-          [
-              _Ty=float
-          ]
-C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(98,1): error C2760: синтаксическая ошибка: непредвиденный элемент "end of file". Ожидается "<"
-C:\Foton\Task1\T1\ConsoleApplication1\ConsoleApplication1.cpp(94,42): fatal  error C1075: "{": не найдена несоответствующая лексема
