@@ -32,7 +32,7 @@ double generatePercentage() {
 }
 
 
-void fillarr(std::vector<Data>& arr) {
+void fillArr(std::vector<Data>& arr) {
 	for (size_t i = 0; i < arr.size(); ++i) {
 		arr[i].name = generateName();
 		arr[i].percentage = generatePercentage();
@@ -45,17 +45,17 @@ bool sortParams(const Data arr1, const Data arr2) {
 }
 
 
-void sortarr(std::vector<Data>& arr) {
+void sortArr(std::vector<Data>& arr) {
 	std::sort(arr.begin(), arr.end(), sortParams);
 }
 
 
 double sortingTimer(std::vector<Data>& arr, int seed) {
 	std::mt19937 randomGenerator(seed);
-	fillarr(arr);
+	fillArr(arr);
 
 	auto startTime = std::chrono::high_resolution_clock::now();
-	sortarr(arr);
+	sortArr(arr);
 	auto endTime = std::chrono::high_resolution_clock::now();
 
 	std::chrono::duration<double> duration = endTime - startTime;
