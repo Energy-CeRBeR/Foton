@@ -1,0 +1,2 @@
+﻿  Solution.cpp
+C:\Foton\Новые задания\Решения\Task2\Task2_Solution\Solution\Solution.cpp(162): error C4700: использована неинициализированная локальная переменная "pixel_coords"
