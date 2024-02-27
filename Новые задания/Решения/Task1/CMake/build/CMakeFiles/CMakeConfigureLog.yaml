@@ -24,7 +24,7 @@ events:
       The output was:
       0
       Версия MSBuild 17.7.2+d6990bcfa для .NET Framework
-      Сборка начата 15.02.2024 21:59:00.
+      Сборка начата 16.02.2024 20:40:02.
       
       Проект "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\3.28.1\\CompilerIdC\\CompilerIdC.vcxproj" в узле 1 (целевые объекты по умолчанию).
       PrepareForBuild:
@@ -52,7 +52,7 @@ events:
           Предупреждений: 0
           Ошибок: 0
       
-      Прошло времени 00:00:00.59
+      Прошло времени 00:00:02.39
       
       
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CompilerIdC.exe"
@@ -78,7 +78,7 @@ events:
       The output was:
       0
       Версия MSBuild 17.7.2+d6990bcfa для .NET Framework
-      Сборка начата 15.02.2024 21:59:01.
+      Сборка начата 16.02.2024 20:40:06.
       
       Проект "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\3.28.1\\CompilerIdCXX\\CompilerIdCXX.vcxproj" в узле 1 (целевые объекты по умолчанию).
       PrepareForBuild:
@@ -106,7 +106,7 @@ events:
           Предупреждений: 0
           Ошибок: 0
       
-      Прошло времени 00:00:00.46
+      Прошло времени 00:00:02.01
       
       
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CompilerIdCXX.exe"
@@ -125,8 +125,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-y70hiy"
-      binary: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-y70hiy"
+      source: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-k01zfv"
+      binary: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-k01zfv"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS /W3"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
@@ -134,39 +134,39 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-y70hiy'
+        Change Dir: 'C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-k01zfv'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_37332.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_be8f9.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Версия MSBuild 17.7.2+d6990bcfa для .NET Framework
-        Сборка начата 15.02.2024 21:59:02.
+        Сборка начата 16.02.2024 20:40:09.
         
-        Проект "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y70hiy\\cmTC_37332.vcxproj" в узле 1 (целевые объекты по умолчанию).
+        Проект "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-k01zfv\\cmTC_be8f9.vcxproj" в узле 1 (целевые объекты по умолчанию).
         PrepareForBuild:
-          Создание каталога "cmTC_37332.dir\\Debug\\".
-          Создание каталога "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y70hiy\\Debug\\".
-          Создание каталога "cmTC_37332.dir\\Debug\\cmTC_37332.tlog\\".
+          Создание каталога "cmTC_be8f9.dir\\Debug\\".
+          Создание каталога "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-k01zfv\\Debug\\".
+          Создание каталога "cmTC_be8f9.dir\\Debug\\cmTC_be8f9.tlog\\".
         InitializeBuildStatus:
-          Создание "cmTC_37332.dir\\Debug\\cmTC_37332.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
-          Обращение к "cmTC_37332.dir\\Debug\\cmTC_37332.tlog\\unsuccessfulbuild".
+          Создание "cmTC_be8f9.dir\\Debug\\cmTC_be8f9.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
+          Обращение к "cmTC_be8f9.dir\\Debug\\cmTC_be8f9.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_37332.dir\\Debug\\\\" /Fd"cmTC_37332.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCCompilerABI.c"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_be8f9.dir\\Debug\\\\" /Fd"cmTC_be8f9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCCompilerABI.c"
           Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.37.32822 для x64
-          CMakeCCompilerABI.c
           (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_37332.dir\\Debug\\\\" /Fd"cmTC_37332.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCCompilerABI.c"
+          CMakeCCompilerABI.c
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /Fo"cmTC_be8f9.dir\\Debug\\\\" /Fd"cmTC_be8f9.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TC /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCCompilerABI.c"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y70hiy\\Debug\\cmTC_37332.exe" /INCREMENTAL /ILK:"cmTC_37332.dir\\Debug\\cmTC_37332.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-y70hiy/Debug/cmTC_37332.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-y70hiy/Debug/cmTC_37332.lib" /MACHINE:X64  /machine:x64 cmTC_37332.dir\\Debug\\CMakeCCompilerABI.obj
-          cmTC_37332.vcxproj -> C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y70hiy\\Debug\\cmTC_37332.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-k01zfv\\Debug\\cmTC_be8f9.exe" /INCREMENTAL /ILK:"cmTC_be8f9.dir\\Debug\\cmTC_be8f9.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-k01zfv/Debug/cmTC_be8f9.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-k01zfv/Debug/cmTC_be8f9.lib" /MACHINE:X64  /machine:x64 cmTC_be8f9.dir\\Debug\\CMakeCCompilerABI.obj
+          cmTC_be8f9.vcxproj -> C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-k01zfv\\Debug\\cmTC_be8f9.exe
         FinalizeBuildStatus:
-          Файл "cmTC_37332.dir\\Debug\\cmTC_37332.tlog\\unsuccessfulbuild" удаляется.
-          Обращение к "cmTC_37332.dir\\Debug\\cmTC_37332.tlog\\cmTC_37332.lastbuildstate".
-        Сборка проекта "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-y70hiy\\cmTC_37332.vcxproj" завершена (целевые объекты по умолчанию).
+          Файл "cmTC_be8f9.dir\\Debug\\cmTC_be8f9.tlog\\unsuccessfulbuild" удаляется.
+          Обращение к "cmTC_be8f9.dir\\Debug\\cmTC_be8f9.tlog\\cmTC_be8f9.lastbuildstate".
+        Сборка проекта "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-k01zfv\\cmTC_be8f9.vcxproj" завершена (целевые объекты по умолчанию).
         
         Сборка успешно завершена.
             Предупреждений: 0
             Ошибок: 0
         
-        Прошло времени 00:00:00.50
+        Прошло времени 00:00:01.93
         
       exitCode: 0
   -
@@ -178,8 +178,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-6iwsbl"
-      binary: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-6iwsbl"
+      source: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-p9dy4e"
+      binary: "C:/Foton/\u041d\u043e\u0432\u044b\u0435 \u0437\u0430\u0434\u0430\u043d\u0438\u044f/\u0420\u0435\u0448\u0435\u043d\u0438\u044f/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-p9dy4e"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /W3 /GR /EHsc"
       CMAKE_EXE_LINKER_FLAGS: "/machine:x64"
@@ -187,39 +187,39 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-6iwsbl'
+        Change Dir: 'C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-p9dy4e'
         
-        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_0518f.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
+        Run Build Command(s): "C:/Program Files/Microsoft Visual Studio/2022/Community/MSBuild/Current/Bin/amd64/MSBuild.exe" cmTC_5349d.vcxproj /p:Configuration=Debug /p:Platform=x64 /p:VisualStudioVersion=17.0 /v:n
         Версия MSBuild 17.7.2+d6990bcfa для .NET Framework
-        Сборка начата 15.02.2024 21:59:02.
+        Сборка начата 16.02.2024 20:40:11.
         
-        Проект "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6iwsbl\\cmTC_0518f.vcxproj" в узле 1 (целевые объекты по умолчанию).
+        Проект "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9dy4e\\cmTC_5349d.vcxproj" в узле 1 (целевые объекты по умолчанию).
         PrepareForBuild:
-          Создание каталога "cmTC_0518f.dir\\Debug\\".
-          Создание каталога "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6iwsbl\\Debug\\".
-          Создание каталога "cmTC_0518f.dir\\Debug\\cmTC_0518f.tlog\\".
+          Создание каталога "cmTC_5349d.dir\\Debug\\".
+          Создание каталога "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9dy4e\\Debug\\".
+          Создание каталога "cmTC_5349d.dir\\Debug\\cmTC_5349d.tlog\\".
         InitializeBuildStatus:
-          Создание "cmTC_0518f.dir\\Debug\\cmTC_0518f.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
-          Обращение к "cmTC_0518f.dir\\Debug\\cmTC_0518f.tlog\\unsuccessfulbuild".
+          Создание "cmTC_5349d.dir\\Debug\\cmTC_5349d.tlog\\unsuccessfulbuild", так как было задано "AlwaysCreate".
+          Обращение к "cmTC_5349d.dir\\Debug\\cmTC_5349d.tlog\\unsuccessfulbuild".
         ClCompile:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_0518f.dir\\Debug\\\\" /Fd"cmTC_0518f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\CL.exe /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5349d.dir\\Debug\\\\" /Fd"cmTC_5349d.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
           Оптимизирующий компилятор Microsoft (R) C/C++ версии 19.37.32822 для x64
-          CMakeCXXCompilerABI.cpp
           (C) Корпорация Майкрософт (Microsoft Corporation).  Все права защищены.
-          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_0518f.dir\\Debug\\\\" /Fd"cmTC_0518f.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
+          CMakeCXXCompilerABI.cpp
+          cl /c /Zi /W3 /WX- /diagnostics:column /Od /Ob0 /D _MBCS /D WIN32 /D _WINDOWS /D "CMAKE_INTDIR=\\"Debug\\"" /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Zc:inline /GR /Fo"cmTC_5349d.dir\\Debug\\\\" /Fd"cmTC_5349d.dir\\Debug\\vc143.pdb" /external:W3 /Gd /TP /errorReport:queue "C:\\Program Files\\CMake\\share\\cmake-3.28\\Modules\\CMakeCXXCompilerABI.cpp"
         Link:
-          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6iwsbl\\Debug\\cmTC_0518f.exe" /INCREMENTAL /ILK:"cmTC_0518f.dir\\Debug\\cmTC_0518f.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-6iwsbl/Debug/cmTC_0518f.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-6iwsbl/Debug/cmTC_0518f.lib" /MACHINE:X64  /machine:x64 cmTC_0518f.dir\\Debug\\CMakeCXXCompilerABI.obj
-          cmTC_0518f.vcxproj -> C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6iwsbl\\Debug\\cmTC_0518f.exe
+          C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.37.32822\\bin\\HostX64\\x64\\link.exe /ERRORREPORT:QUEUE /OUT:"C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9dy4e\\Debug\\cmTC_5349d.exe" /INCREMENTAL /ILK:"cmTC_5349d.dir\\Debug\\cmTC_5349d.ilk" /NOLOGO kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-p9dy4e/Debug/cmTC_5349d.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:/Foton/Новые задания/Решения/Task1/CMake/build/CMakeFiles/CMakeScratch/TryCompile-p9dy4e/Debug/cmTC_5349d.lib" /MACHINE:X64  /machine:x64 cmTC_5349d.dir\\Debug\\CMakeCXXCompilerABI.obj
+          cmTC_5349d.vcxproj -> C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9dy4e\\Debug\\cmTC_5349d.exe
         FinalizeBuildStatus:
-          Файл "cmTC_0518f.dir\\Debug\\cmTC_0518f.tlog\\unsuccessfulbuild" удаляется.
-          Обращение к "cmTC_0518f.dir\\Debug\\cmTC_0518f.tlog\\cmTC_0518f.lastbuildstate".
-        Сборка проекта "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-6iwsbl\\cmTC_0518f.vcxproj" завершена (целевые объекты по умолчанию).
+          Файл "cmTC_5349d.dir\\Debug\\cmTC_5349d.tlog\\unsuccessfulbuild" удаляется.
+          Обращение к "cmTC_5349d.dir\\Debug\\cmTC_5349d.tlog\\cmTC_5349d.lastbuildstate".
+        Сборка проекта "C:\\Foton\\Новые задания\\Решения\\Task1\\CMake\\build\\CMakeFiles\\CMakeScratch\\TryCompile-p9dy4e\\cmTC_5349d.vcxproj" завершена (целевые объекты по умолчанию).
         
         Сборка успешно завершена.
             Предупреждений: 0
             Ошибок: 0
         
-        Прошло времени 00:00:00.45
+        Прошло времени 00:00:01.52
         
       exitCode: 0
 ...
