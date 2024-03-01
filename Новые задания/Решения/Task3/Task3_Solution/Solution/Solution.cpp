@@ -24,7 +24,6 @@ struct PixelsData {
 
 
 BMP_data readBMP(const std::string PATH) {
-
     BMP_data bmp_data;
 
     std::ifstream file(PATH, std::ios::binary);
@@ -42,17 +41,11 @@ BMP_data readBMP(const std::string PATH) {
         exit(1);
     }
 
-    int pixelsOffset = *(int*)&header[10];
-    int width = *(int*)&header[18];
-    int height = *(int*)&header[22];
-    int bitsPerPixel = *(int*)&header[28];
-    int colorsChannels = bitsPerPixel / 8;
-
-    bmp_data.width = width;
-    bmp_data.height = height;
-    bmp_data.pixelsOffset = pixelsOffset;
-    bmp_data.bitsPerPixel = bitsPerPixel;
-    bmp_data.colorsChannels = colorsChannels;
+    bmp_data.pixelsOffset = *(int*)&header[10];
+    bmp_data.width = *(int*)&header[18];
+    bmp_data.height = *(int*)&header[22];
+    bmp_data.bitsPerPixel = *(int*)&header[28];
+    bmp_data.colorsChannels = bmp_data.bitsPerPixel / 8;
 
     file.close();
     return bmp_data;
@@ -94,6 +87,7 @@ PixelsData get_pixels_data(const BMP_data& bmp_data, const std::string PATH) {
     return pixels_data;
 }
 
+
 void print_bmp_data(const BMP_data& bmp_data) {
     std::cout << "BMP info:" << std::endl;
     std::cout << "Image width: " << bmp_data.width << std::endl;
@@ -102,7 +96,8 @@ void print_bmp_data(const BMP_data& bmp_data) {
     std::cout << "Colors channel: " << bmp_data.colorsChannels << std::endl;
 }
 
-void print_colors(const std::vector<uint8_t>& position, int colorsChannels) {
+
+void _print_colors(const std::vector<uint8_t>& position, int colorsChannels) {
     if (colorsChannels > 1) {
         for (int i = colorsChannels - 1; i >= 0; i--) {
             std::cout << (int)position[i] << " ";
@@ -121,19 +116,19 @@ void print_pixels_data(const PixelsData& pixels_data, int colorsChannels) {
     std::cout << "Pixels info:" << std::endl;
 
     std::cout << "Coordinates of the upper-left pixel: ";
-    print_colors(pixels_data.upper_left, colorsChannels);
+    _print_colors(pixels_data.upper_left, colorsChannels);
 
     std::cout << "Coordinates of the upper-right pixel: ";
-    print_colors(pixels_data.upper_right, colorsChannels);
+    _print_colors(pixels_data.upper_right, colorsChannels);
 
     std::cout << "Coordinates of the central pixel:";
-    print_colors(pixels_data.central, colorsChannels);
+    _print_colors(pixels_data.central, colorsChannels);
 
     std::cout << "Coordinates of the lower-left pixel: ";
-    print_colors(pixels_data.lower_left, colorsChannels);
+    _print_colors(pixels_data.lower_left, colorsChannels);
 
     std::cout << "Coordinates of the lower_right pixel: ";
-    print_colors(pixels_data.lower_right, colorsChannels);
+    _print_colors(pixels_data.lower_right, colorsChannels);
 }
 
 
