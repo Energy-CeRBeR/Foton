@@ -1,3 +1,4 @@
 ﻿  Solution.cpp
-C:\Foton\Новые задания\Решения\Task3\Task3_Solution\Solution\Solution.cpp(79,110): warning C4244: аргумент: преобразование "double" в "__int64", возможна потеря данных
-LINK : fatal error LNK1168: не удается открыть C:\Foton\Новые задания\Решения\Task3\Task3_Solution\x64\Debug\Solution.exe для записи
+C:\Foton\Новые задания\Решения\Task3\Task3_Solution\Solution\Solution.cpp(64,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task3\Task3_Solution\Solution\Solution.cpp(77,111): warning C4244: аргумент: преобразование "double" в "__int64", возможна потеря данных
+  Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task3\Task3_Solution\x64\Debug\Solution.exe

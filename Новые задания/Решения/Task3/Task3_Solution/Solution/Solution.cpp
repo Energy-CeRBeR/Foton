@@ -61,50 +61,38 @@ BMP_data readBMP(const std::string PATH) {
 
 PixelsData get_pixels_data(const BMP_data& bmp_data, const std::string PATH) {
     PixelsData pixels_data;
-    int row_size = ((((bmp_data.width * 24) + 31) & ~31) >> 3);
+    int row_size = floor((bmp_data.bitsPerPixel * bmp_data.width + 31) / 32) * 4;
     std::ifstream file(PATH, std::ios::binary);
+    std::vector<uint8_t> rgb(bmp_data.colorsChannels);
 
-    std::vector<uint8_t> rgb_1(3);
-    file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ? (bmp_data.width - 1) : 0) * row_size, std::ios::beg);
-    file.read(reinterpret_cast<char*>(rgb_1.data()), 3);
-    pixels_data.upper_left = rgb_1;
+    file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ? (bmp_data.height - 1) : 0) * row_size, std::ios::beg);
+    file.read(reinterpret_cast<char*>(rgb.data()), bmp_data.colorsChannels);
+    pixels_data.upper_left = rgb;
 
-    std::vector<uint8_t> rgb_2(3);
-    file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ? (bmp_data.width - 1) : 0) * row_size + (bmp_data.width * 3), std::ios::beg);
-    file.read(reinterpret_cast<char*>(rgb_2.data()), 3);
-    pixels_data.upper_right = rgb_2;
+    file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ? (bmp_data.height - 1) : 0) * row_size + (bmp_data.width - 1) * bmp_data.colorsChannels, std::ios::beg);
+    file.read(reinterpret_cast<char*>(rgb.data()), bmp_data.colorsChannels);
+    pixels_data.upper_right = rgb;
 
-    std::vector<uint8_t> rgb_3(3);
     file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ?
-        (bmp_data.width - std::floor(bmp_data.height / 2) - 1) : std::floor(bmp_data.height / 2)) * row_size +
-        std::floor(bmp_data.width / 2) * 3, std::ios::beg);
-    file.read(reinterpret_cast<char*>(rgb_3.data()), 3);
-    pixels_data.central = rgb_3;
+        (bmp_data.height - std::floor(bmp_data.height / 2) - 1) : std::floor(bmp_data.height / 2)) * row_size +
+        std::floor(bmp_data.width / 2) * bmp_data.colorsChannels, std::ios::beg);
+    file.read(reinterpret_cast<char*>(rgb.data()), bmp_data.colorsChannels);
+    pixels_data.central = rgb;
 
-    std::vector<uint8_t> rgb_4(3);
     file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ?
-        (bmp_data.width - (bmp_data.height - 1) - 1) : (bmp_data.height - 1)) * row_size, std::ios::beg);
-    file.read(reinterpret_cast<char*>(rgb_4.data()), 3);
-    pixels_data.lower_left = rgb_4;
-    file.seekg(0);
+        (bmp_data.height - (bmp_data.height - 1) - 1) : (bmp_data.height - 1)) * row_size, std::ios::beg);
+    file.read(reinterpret_cast<char*>(rgb.data()), bmp_data.colorsChannels);
+    pixels_data.lower_left = rgb;
 
-    std::vector<uint8_t> rgb_5(3);
     file.seekg(bmp_data.pixelsOffset + (bmp_data.height > 0 ?
-        (bmp_data.width - (bmp_data.height - 1) - 1) : (bmp_data.height - 1)) * row_size +
-        (bmp_data.width - 1) * 3, std::ios::beg);
-    file.read(reinterpret_cast<char*>(rgb_5.data()), 3);
-    pixels_data.lower_right = rgb_5;
-
-    std::cout << (int)pixels_data.upper_left[0] << std::endl;
-    std::cout << (int)pixels_data.upper_right[0] << std::endl;
-    std::cout << (int)pixels_data.central[0] << std::endl;
-    std::cout << (int)pixels_data.lower_left[0] << std::endl;
-    std::cout << (int)pixels_data.lower_right[0] << std::endl;
+        (bmp_data.height - (bmp_data.height - 1) - 1) : (bmp_data.height - 1)) * row_size +
+        (bmp_data.width - 1) * bmp_data.colorsChannels, std::ios::beg);
+    file.read(reinterpret_cast<char*>(rgb.data()), bmp_data.colorsChannels);
+    pixels_data.lower_right = rgb;
 
     file.close();
     return pixels_data;
 }
-
 
 void print_bmp_data(const BMP_data& bmp_data) {
     std::cout << "BMP info:" << std::endl;
@@ -114,24 +102,38 @@ void print_bmp_data(const BMP_data& bmp_data) {
     std::cout << "Colors channel: " << bmp_data.colorsChannels << std::endl;
 }
 
+void print_colors(const std::vector<uint8_t>& position, int colorsChannels) {
+    if (colorsChannels > 1) {
+        for (int i = colorsChannels - 1; i >= 0; i--) {
+            std::cout << (int)position[i] << " ";
+        }
+    }
+    else {
+        for (int i = 0; i < 3; i++) {
+            std::cout << (int)position[0] << " ";
+        }
+    }
+    std::cout << std::endl;
+}
 
-void print_pixels_data(const PixelsData& pixels_data) {
+
+void print_pixels_data(const PixelsData& pixels_data, int colorsChannels) {
     std::cout << "Pixels info:" << std::endl;
 
-    std::vector<uint8_t> upper_left = pixels_data.upper_left;
-    std::cout << "Coordinates of the upper-left pixel: " << (int)upper_left[2] << " " << (int)upper_left[0] << " " << (int)upper_left[1] << std::endl;
+    std::cout << "Coordinates of the upper-left pixel: ";
+    print_colors(pixels_data.upper_left, colorsChannels);
 
-    std::vector<uint8_t> upper_right = pixels_data.upper_right;
-    std::cout << "Coordinates of the upper-right pixel: " << (int)upper_right[2] << " " << (int)upper_right[0] << " " << (int)upper_right[1] << std::endl;
+    std::cout << "Coordinates of the upper-right pixel: ";
+    print_colors(pixels_data.upper_right, colorsChannels);
 
-    std::vector<uint8_t> central = pixels_data.central;
-    std::cout << "Coordinates of the central pixel: " << (int)central[2] << " " << (int)central[0] << " " << (int)central[1] << std::endl;
+    std::cout << "Coordinates of the central pixel:";
+    print_colors(pixels_data.central, colorsChannels);
 
-    std::vector<uint8_t> lower_left = pixels_data.lower_left;
-    std::cout << "Coordinates of the lower-left pixel: " << (int)lower_left[2] << " " << (int)lower_left[0] << " " << (int)lower_left[1] << std::endl;
+    std::cout << "Coordinates of the lower-left pixel: ";
+    print_colors(pixels_data.lower_left, colorsChannels);
 
-    std::vector<uint8_t> lower_right = pixels_data.lower_right;
-    std::cout << "Coordinates of the lower-right pixel: " << (int)lower_right[2] << " " << (int)lower_right[0] << " " << (int)lower_right[1] << std::endl;
+    std::cout << "Coordinates of the lower_right pixel: ";
+    print_colors(pixels_data.lower_right, colorsChannels);
 }
 
 
@@ -147,7 +149,7 @@ int main(int argc, char* argv[]) {
 
     print_bmp_data(bmp_data);
     std::cout << std::endl;
-    print_pixels_data(pixels_data);
+    print_pixels_data(pixels_data, bmp_data.colorsChannels);
 
     return 0;
 }
