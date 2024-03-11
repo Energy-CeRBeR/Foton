@@ -38,10 +38,16 @@ void create_negative_file(const std::string INPUT_PATH, const std::string OUTPUT
 
     int row_size = std::floor((bitsPerPixel * width + 31) / 32) * 4;
     std::vector<char> row(row_size);
+    
+    std::vector<unsi
+
     for (int i = 0; i < height; i++) {
         input_file.read(row.data(), row_size); 
         for (int j = 0; j < width; j++) {
-            row[j * colorsChannels] = 255 - row[j * colorsChannels];
+            for (int k = 0; k < colorsChannels; k++) {
+                std::swap(row[j * colorsChannels + k]
+            }
+            
         }
         output_file.write(row.data(), row_size);
     }
