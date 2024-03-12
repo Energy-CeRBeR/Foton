@@ -2,29 +2,29 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <iomanip>
+#include <cmath>
 
 
-struct PixelData {
-    unsigned int B;
-    unsigned int G;
-    unsigned int R;
+struct Answer {
+    std::vector<double> mean;
+    std::vector<double> cko;
 };
 
 
-
-PixelData calculateMO(const std::string PATH) {
-    std::ifstream input_file(PATH, std::ios::binary);
-    if (!input_file.is_open()) {
-        std::cout << "Can't open one of the files";
-        input_file.close();
+Answer calculate_MO_CKO(const std::string PATH) {
+    std::ifstream file(PATH, std::ios::binary);
+    if (!file.is_open()) {
+        std::cout << "The file cannot be opened using this path";
+        file.close();
         exit(1);
     }
 
     char header[54];
-    input_file.read(header, 54);
+    file.read(header, 54);
     if (header[0] != 'B' || header[1] != 'M') {
-        std::cout << "The input file is not a bmp format file!" << std::endl;
-        input_file.close();
+        std::cout << "The file is not a bmp format file!" << std::endl;
+        file.close();
         exit(1);
     }
 
@@ -34,51 +34,78 @@ PixelData calculateMO(const std::string PATH) {
     int bitsPerPixel = *(int*)&header[28];
     int colorsChannels = bitsPerPixel / 8;
     int imageSize = width * height * colorsChannels;
-
     int row_size = std::floor((bitsPerPixel * width + 31) / 32) * 4;
-    std::vector<char> row(row_size);
 
-    PixelData pixels_MO;
-    unsigned int sumR = 0;
-    unsigned int sumG = 0;
-    unsigned int sumB = 0;
-
-    int num;
-    for (int i = 0; i < height; i++) {
-        input_file.read(row.data(), row_size);
-        for (int j = 0; j < width; j++) {
-            sumB += row[j * colorsChannels];
-            sumG += row[j * colorsChannels + 1];
-            sumR += row[j * colorsChannels + 2];
-
-            std::cout <<  row[j * colorsChannels] << std::endl;
-            std::cout <<  row[j * colorsChannels + 1] << std::endl;
-            std::cout << row[j * colorsChannels + 2] << std::endl;
+    char* pixels = new char[imageSize];
+    file.seekg(pixelsOffset); 
+    file.read(pixels, imageSize);
+    file.close();
+    
+    std::vector<double> mean(colorsChannels);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int offset = (x * colorsChannels) + (y * row_size);
+            for (int k = 0; k < colorsChannels; k++) {
+                mean[k] += (int)(unsigned char)pixels[offset + k];
+            }
         }
     }
+    for (int k = colorsChannels - 1; k >= 0; k--) {
+        mean[k] /= (double)(width * height);
+    }
 
-    pixels_MO.R = sumR / (width * height);
-    pixels_MO.G = sumG / (width * height);
-    pixels_MO.B = sumB / (width * height);
+    std::vector<double> standart_devation(colorsChannels);
+    for (int y = 0; y < height; y++) {
+        for (int x = 0; x < width; x++) {
+            int offset = (x * colorsChannels) + (y * row_size);
+            for (int k = 0; k < colorsChannels; k++) {
+                standart_devation[k] += ((int)(unsigned char)pixels[offset + k] - mean[k]) * 
+                    ((int)(unsigned char)pixels[offset + k] - mean[k]);
+            }
+        }
+    }
+    for (int k = colorsChannels - 1; k >= 0; k--) {
+        standart_devation[k] = std::sqrt(standart_devation[k] / (double)(width * height));
+    }
 
-    input_file.close();
-    return pixels_MO;
+    delete[] pixels;
+
+    Answer result;
+    result.mean = mean;
+    result.cko = standart_devation;
+
+
+    return result;
+}
+
+
+void print_result(const Answer& answer) {
+    std::vector<double> mean = answer.mean;
+    std::vector<double> cko = answer.cko;
+
+    std::cout << "MO: ";
+    for (auto num : mean) {
+        std::cout << num << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "CKO: ";
+    for (auto num : cko) {
+        std::cout << num << " ";
+    }
 }
 
 
 int main(int argc, char* argv[]) {
+    std::cout << std::fixed << std::setprecision(10);
     if (argc != 2) {
-        std::cout << "Enter the PATH to the input file and to the output file";
+        std::cout << "You need to enter the path to the file";
         return 1;
     }
 
     std::string PATH = argv[1];
-    PixelData result = calculateMO(PATH);
-
-    std::cout << result.R << std::endl;
-    std::cout << result.G << std::endl;
-    std::cout << result.B << std::endl;
-    
+    Answer answer = calculate_MO_CKO(PATH);
+    print_result(answer);
 
     return 0;
 }

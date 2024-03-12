@@ -4,6 +4,7 @@
 #include <string>
 
 
+
 void create_negative_file(const std::string INPUT_PATH, const std::string OUTPUT_PATH) {
 
     std::ifstream input_file(INPUT_PATH, std::ios::binary);
@@ -60,6 +61,7 @@ void create_negative_file(const std::string INPUT_PATH, const std::string OUTPUT
 
 
 int main(int argc, char* argv[]) {
+    
     if (argc != 3) {
         std::cout << "Enter the PATH to the input file and to the output file";
         return 1;

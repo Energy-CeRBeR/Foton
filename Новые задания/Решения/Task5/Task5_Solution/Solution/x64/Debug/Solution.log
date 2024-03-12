@@ -1,4 +1,3 @@
 ﻿  Solution.cpp
-C:\Foton\Новые задания\Решения\Task5\Task5_Solution\Solution\Solution.cpp(38,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task5\Task5_Solution\Solution\Solution.cpp(46,9): warning C4101: num: неиспользованная локальная переменная
+C:\Foton\Новые задания\Решения\Task5\Task5_Solution\Solution\Solution.cpp(37,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
   Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task5\Task5_Solution\x64\Debug\Solution.exe
