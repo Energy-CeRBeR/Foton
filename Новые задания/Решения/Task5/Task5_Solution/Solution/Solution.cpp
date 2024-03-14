@@ -4,6 +4,7 @@
 #include <string>
 #include <iomanip>
 #include <cmath>
+#include <algorithm>
 
 
 struct Answer {
@@ -82,6 +83,8 @@ Answer calculate_MO_CKO(const std::string PATH) {
 void print_result(const Answer& answer) {
     std::vector<double> mean = answer.mean;
     std::vector<double> cko = answer.cko;
+    std::reverse(mean.begin(), mean.end());
+    std::reverse(cko.begin(), cko.end());
 
     std::cout << "MO: ";
     for (auto num : mean) {
