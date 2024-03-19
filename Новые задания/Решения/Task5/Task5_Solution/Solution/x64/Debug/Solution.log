@@ -1,3 +1,4 @@
 ﻿  Solution.cpp
 C:\Foton\Новые задания\Решения\Task5\Task5_Solution\Solution\Solution.cpp(38,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  LINK : не найден или не выполнена сборка C:\Foton\Новые задания\Решения\Task5\Task5_Solution\x64\Debug\Solution.exe при последней инкрементной компоновке; выполняется полная компоновка
   Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task5\Task5_Solution\x64\Debug\Solution.exe

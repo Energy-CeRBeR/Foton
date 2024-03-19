@@ -38,10 +38,10 @@ Answer calculate_MO_CKO(const std::string PATH) {
     int row_size = std::floor((bitsPerPixel * width + 31) / 32) * 4;
 
     char* pixels = new char[imageSize];
-    file.seekg(pixelsOffset); 
+    file.seekg(pixelsOffset);
     file.read(pixels, imageSize);
     file.close();
-    
+
     std::vector<double> mean(colorsChannels);
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
@@ -60,12 +60,12 @@ Answer calculate_MO_CKO(const std::string PATH) {
         for (int x = 0; x < width; x++) {
             int offset = (x * colorsChannels) + (y * row_size);
             for (int k = 0; k < colorsChannels; k++) {
-                standart_devation[k] += ((int)(unsigned char)pixels[offset + k] - mean[k]) * 
+                standart_devation[k] += ((int)(unsigned char)pixels[offset + k] - mean[k]) *
                     ((int)(unsigned char)pixels[offset + k] - mean[k]);
             }
         }
     }
-    for (int k = colorsChannels - 1; k >= 0; k--) {
+    for (int k = 0; k < colorsChannels; k++) {
         standart_devation[k] = std::sqrt(standart_devation[k] / (double)(width * height));
     }
 
