@@ -34,7 +34,7 @@ Answer calculate_MO_CKO(const std::string PATH) {
     int height = *(int*)&header[22];
     int bitsPerPixel = *(int*)&header[28];
     int colorsChannels = bitsPerPixel / 8;
-    int imageSize = width * height * colorsChannels;
+    int imageSize = width * colorsChannel + height * row_size;
     int row_size = std::floor((bitsPerPixel * width + 31) / 32) * 4;
 
     char* pixels = new char[imageSize];
@@ -43,14 +43,19 @@ Answer calculate_MO_CKO(const std::string PATH) {
     file.close();
 
     std::vector<double> mean(colorsChannels);
+    mx = 0;
     for (int y = 0; y < height; y++) {
         for (int x = 0; x < width; x++) {
             int offset = (x * colorsChannels) + (y * row_size);
             for (int k = 0; k < colorsChannels; k++) {
                 mean[k] += (int)(unsigned char)pixels[offset + k];
+                if (offset + k > mx) {
+                    mx = offset + k;
+                }
             }
         }
     }
+    std::cout << mx << " " << imageSize << std::endl;
     for (int k = colorsChannels - 1; k >= 0; k--) {
         mean[k] /= (double)(width * height);
     }
