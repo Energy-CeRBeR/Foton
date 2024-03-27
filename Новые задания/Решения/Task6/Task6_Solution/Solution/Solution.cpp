@@ -34,8 +34,8 @@ Answer calculate_MO_CKO(const std::string PATH) {
     int height = *(int*)&header[22];
     int bitsPerPixel = *(int*)&header[28];
     int colorsChannels = bitsPerPixel / 8;
-    int imageSize = width * height * colorsChannels;
     int row_size = std::floor((bitsPerPixel * width + 31) / 32) * 4;
+    int imageSize = width * colorsChannels + (height - 1) * row_size;
 
     char* pixels = new char[imageSize];
     file.seekg(pixelsOffset);
