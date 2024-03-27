@@ -4,7 +4,6 @@
 #include <string>
 #include <chrono>
 
-
 #pragma pack(2)
 
 struct BITMAPFILEHEADER {
