@@ -145,15 +145,22 @@ void averaging_image(const std::string INPUT_PATH, const std::string OUTPUT_PATH
     std::vector<char> pixels(row_size * height + width * colorsChannels);
     input_file.read(pixels.data(), row_size * height + width * colorsChannels);
     int x_1 = 0;
+    std::vector<int> s(colorsChannels);
     for (int x = 0; x <= height - n; x += n) {
         int y_1 = 0;
         for (int y = 0; y <= width - n; y += n) {
+            for (int k = 0; k < colorsChannels; k++) {
+                s[k] = pixels[0] - pixels[0];
+            }
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     for (int k = 0; k < colorsChannels; k++) {
-                        new_pixels[x_1 * new_row_size + y_1 * colorsChannels + k] += (pixels[(x + i) * row_size + (y + j) * colorsChannels + k] / (n * n));
+                        s[k] += pixels[(x + i) * row_size + (y + j) * colorsChannels + k];
                     }
                 }
+            }
+            for (int k = 0; k < colorsChannels; k++) {
+                new_pixels[x_1 * new_row_size + y_1 * colorsChannels + k] = s[k] / (n * n);
             }
             y_1++;
         }
