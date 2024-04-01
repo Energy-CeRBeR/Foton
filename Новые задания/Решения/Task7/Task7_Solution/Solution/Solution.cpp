@@ -3,8 +3,10 @@
 #include <vector>
 #include <string>
 #include <chrono>
+#include <cstdint>
 
 #pragma pack(2)
+
 
 struct BITMAPFILEHEADER {
     unsigned short bfType;
@@ -155,7 +157,12 @@ void averaging_image(const std::string INPUT_PATH, const std::string OUTPUT_PATH
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < n; j++) {
                     for (int k = 0; k < colorsChannels; k++) {
-                        s[k] += pixels[(x + i) * row_size + (y + j) * colorsChannels + k];
+                        if ((int)(pixels[(x + i) * row_size + (y + j) * colorsChannels + k]) >= 0) {
+                            s[k] += pixels[(x + i) * row_size + (y + j) * colorsChannels + k];
+                        }
+                        else {
+                            s[k] += 256 + pixels[(x + i) * row_size + (y + j) * colorsChannels + k];
+                        }
                     }
                 }
             }
@@ -166,7 +173,6 @@ void averaging_image(const std::string INPUT_PATH, const std::string OUTPUT_PATH
         }
         x_1++;
     }
-    
 
     output_file.write(new_pixels.data(), new_row_size * new_height + new_width * colorsChannels);
 
@@ -178,7 +184,6 @@ void averaging_image(const std::string INPUT_PATH, const std::string OUTPUT_PATH
     input_file.close();
     output_file.close();
 }
-
 
 
 int main(int argc, char* argv[]) {
