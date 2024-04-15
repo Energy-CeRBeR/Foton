@@ -1,2 +1,6 @@
 ﻿  Solution.cpp
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(55,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(57,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(78,32): warning C4101: after_j: неиспользованная локальная переменная
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(78,23): warning C4101: after_i: неиспользованная локальная переменная
   Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task8\Task8_Solution\x64\Debug\Solution.exe
