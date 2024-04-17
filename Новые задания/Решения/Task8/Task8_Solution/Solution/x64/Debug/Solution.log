@@ -3,4 +3,13 @@ C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\
 C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(57,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
 C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(78,32): warning C4101: after_j: неиспользованная локальная переменная
 C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(78,23): warning C4101: after_i: неиспользованная локальная переменная
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(124,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(126,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(154,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(155,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task8\Task8_Solution\Solution\Solution.cpp(168,78): warning C4244: =: преобразование "double" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=char
+          ]
   Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task8\Task8_Solution\x64\Debug\Solution.exe
