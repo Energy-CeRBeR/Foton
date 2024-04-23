@@ -1,0 +1,3 @@
+﻿  Solution.cpp
+C:\Foton\Новые задания\Решения\Task9\Task9_Solution\Solution\Solution.cpp(56,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task9\Task9_Solution\x64\Debug\Solution.exe
