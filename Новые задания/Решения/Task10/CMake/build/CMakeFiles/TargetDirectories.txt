@@ -1,0 +1,3 @@
+C:/Foton/Новые задания/Решения/Task10/CMake/build/CMakeFiles/Task10.dir
+C:/Foton/Новые задания/Решения/Task10/CMake/build/CMakeFiles/ALL_BUILD.dir
+C:/Foton/Новые задания/Решения/Task10/CMake/build/CMakeFiles/ZERO_CHECK.dir
