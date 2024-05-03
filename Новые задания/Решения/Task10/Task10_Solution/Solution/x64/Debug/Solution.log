@@ -1,0 +1,17 @@
+﻿  Solution.cpp
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(56,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(60,21): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(61,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(66,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(134,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(138,21): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(139,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(144,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(170,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(171,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task10\Task10_Solution\Solution\Solution.cpp(184,82): warning C4244: =: преобразование "double" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=char
+          ]
+  Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task10\Task10_Solution\x64\Debug\Solution.exe
