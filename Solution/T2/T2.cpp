@@ -1,128 +1,96 @@
 ﻿#include <iostream>
-#include <fstream>
-#include <cmath>
-#include <chrono>
+#include <cstdio>
 #include <vector>
-
-#pragma pack(2)
-struct BitmapFileHeader {
-    char header[2];
-    unsigned int fileSize;
-    unsigned int reserved;
-    unsigned int dataOffset;
-};
-
-struct BitmapInfoHeader {
-    unsigned int size;
-    int width;
-    int height;
-    unsigned short planes;
-    unsigned short bitCount;
-    unsigned int compression;
-    unsigned int imageSize;
-    int xPixelsPerMeter;
-    int yPixelsPerMeter;
-    unsigned int colorsUsed;
-    unsigned int colorsImportant;
-};
+#include <cassert>
+#include <functional>
+#include <vector>
 
 
 int main() {
-    std::string filename;
-    std::cout << "Enter the BMP image filename: ";
-    std::cin >> filename;
+	int sizeI, sizeJ;
+	scanf("%d %d", &sizeI, &sizeJ);
+	std::function<int(int, int)> encode = [&](int i, int j) {
+		return i * sizeJ + j;
+	};
 
-    std::ifstream file(filename, std::ios::in | std::ios::binary);
-    if (!file) {
-        std::cerr << "Could not open file." << std::endl;
-        return 1;
-    }
+	std::vector<int> parent(1 + encode(sizeI, sizeJ), -1); 
+	std::function<int(int)> getRoot = [&](int v) {
+		if (parent[v] < 0) {
+			return v;
+		}
+		else {
+			int root = getRoot(parent[v]);
+			parent[v] = root;
+			return root;
+		}
+	};
 
-    BitmapFileHeader fileHeader;
-    BitmapInfoHeader infoHeader;
+	std::function<bool(int, int)> join = [&](int a, int b) {
+		a = getRoot(a);
+		b = getRoot(b);
+		if (a == b) {
+			return false;
+		}
+		assert(parent[a] < 0);
+		assert(parent[b] < 0);
+		if (parent[a] < parent[b]) {
+			parent[a] += parent[b];
+			parent[b] = a;
+		}
+		else {
+			parent[b] += parent[a];
+			parent[a] = b;
+		}
+		return true;
+	};
 
-    file.read(reinterpret_cast<char*>(&fileHeader), sizeof(BitmapFileHeader));
-    file.read(reinterpret_cast<char*>(&infoHeader), sizeof(BitmapInfoHeader));
+	for (int i = 1; i <= sizeI; i++) {
+		for (int j = 1; j <= sizeJ; j++) {
+			int code;
+			scanf("%d", &code);
+			if ((code & 1) != 0) {
+				assert(i < sizeI);
+				join(encode(i, j), encode(i + 1, j));
+			}
+			if ((code & 2) != 0) {
+				assert(j < sizeJ);
+				join(encode(i, j), encode(i, j + 1));
+			}
+		}
+	}
 
-    int width = infoHeader.width;
-    int height = infoHeader.height;
-    int pixelSize = infoHeader.bitCount / 8;
-    int padding = (4 - ((width * pixelSize) % 4)) % 4;
-    int row_size = std::floor((infoHeader.bitCount * width + 31) / 32) * 4;
-    int colorsChannels = infoHeader.bitCount / 8;
+	std::vector<int> ansI;
+	std::vector<int> ansJ;
+	std::vector<int> ansD;
+	int ansCost = 0;
 
-    file.seekg(fileHeader.dataOffset, file.beg);
-    char* pixels = new char[height * row_size + width * colorsChannels];
-    file.read(pixels, height * row_size + width * colorsChannels);
+	for (int i = 1; i < sizeI; i++) {
+		for (int j = 1; j <= sizeJ; j++) {
+			if (join(encode(i, j), encode(i + 1, j))) {
+				ansI.push_back(i);
+				ansJ.push_back(j);
+				ansD.push_back(1);
+				ansCost += 1;
+			}
+		}
+	}
 
-    std::vector<double> mean(colorsChannels);
-    std::vector<double> variance(colorsChannels);
+	for (int i = 1; i <= sizeI; i++) {
+		for (int j = 1; j < sizeJ; j++) {
+			if (join(encode(i, j), encode(i, j + 1))) {
+				ansI.push_back(i);
+				ansJ.push_back(j);
+				ansD.push_back(2);
+				ansCost += 2;
+			}
+		}
+	}
 
-    for (int k = 0; k < colorsChannels; k++) {
-        mean[k] = 0;
-        variance[k] = 0;
-    }
-    
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            int cur_position = y * row_size + x * colorsChannels;
-            for (int k = 0; k < colorsChannels; k++) {
-                mean[k] += (int)(unsigned char)pixels[cur_position + k];
-            }
-        }
+	printf("%d %d\n", (int)ansI.size(), ansCost);
+	for (int i = 0; i < (int)ansI.size(); i++) {
+		printf("%d %d %d\n", ansI[i], ansJ[i], ansD[i]);
+	}
 
-        file.seekg(padding, file.cur);
-    }
 
-    file.close();
-
-    int totalPixels = width * height;
-    for (int i = 0; i < colorsChannels; ++i) {
-        mean[i] /= totalPixels;
-    }
-
-    std::ifstream fileAgain(filename, std::ios::in | std::ios::binary);
-    fileAgain.read(reinterpret_cast<char*>(&fileHeader), sizeof(BitmapFileHeader));
-    fileAgain.read(reinterpret_cast<char*>(&infoHeader), sizeof(BitmapInfoHeader));
-    fileAgain.seekg(fileHeader.dataOffset, fileAgain.beg);
-
-    auto start = std::chrono::steady_clock::now();
-
-    for (int y = 0; y < height; ++y) {
-        for (int x = 0; x < width; ++x) {
-            int cur_position = y * row_size + x * colorsChannels;
-
-            for (int k = 0; k < colorsChannels; k++) {
-                variance[k] += ((int)(unsigned char)pixels[cur_position + k] - mean[k]) * ((int)(unsigned char)pixels[cur_position + k] - mean[k]);
-            }
-        }
-        fileAgain.seekg(padding, fileAgain.cur);
-    }
-
-    fileAgain.close();
-
-    for (int i = 0; i < colorsChannels; ++i) {
-        variance[i] /= totalPixels;
-    }
-
-    std::vector<double> stdDeviation(colorsChannels);
-    for (int i = 0; i < colorsChannels; ++i) {
-        stdDeviation[i] = std::sqrt(variance[i]);
-    }
-
-    auto end = std::chrono::steady_clock::now();
-    double elapsedTime = std::chrono::duration_cast<std::chrono::microseconds>(end - start).count() / 1e6;
-
-    std::cout.setf(std::ios::fixed);
-    std::cout.precision(6);
-
-    for (int i = colorsChannels - 1; i >= 0; --i) {
-        std::cout << "Mean of " << 3 - i << " channel: " << mean[i] << std::endl;
-        std::cout << "Standard deviation of " << 3 - i << " channel: " << stdDeviation[i] << std::endl;
-        std::cout << std::endl;
-    }
-
-    std::cout << "Time taken to calculate " << elapsedTime << " seconds" << std::endl;
-
-    return 0;
+	return 0;
 }
