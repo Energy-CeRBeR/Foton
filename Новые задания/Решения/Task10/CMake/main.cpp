@@ -49,6 +49,16 @@ void rotate_nn(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int 
     BITMAPINFOHEADER fileInfoHeader;
     input_file.read((char*)&fileInfoHeader, sizeof(fileInfoHeader));
 
+    std::ofstream logger_file("logger_nn.txt");
+
+    std::cout << "LOGGING nn_integpolation....." << std::endl;
+
+    logger_file << "Логи для интерполяции методом ближайшего соседа: " << std::endl << std::endl;
+    logger_file << "Поворот выполняется на угол: " << angle << std::endl;
+    logger_file << "Начальные значения ширины и высоты изображения:" << std::endl;
+    logger_file << "biWidth: " << fileInfoHeader.biWidth << std::endl;
+    logger_file << "biHeight: " << fileInfoHeader.biHeight << std::endl;
+
     int pixelsOffset = fileHeader.bfOffBits;
     int colorsChannels = fileInfoHeader.biBitCount / 8;
     int width = fileInfoHeader.biWidth;
@@ -62,6 +72,10 @@ void rotate_nn(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int 
 
     fileInfoHeader.biWidth = outputWidth;
     fileInfoHeader.biHeight = outputHeight;
+
+    logger_file << "Новые значения ширины и высоты изображения:" << std::endl;
+    logger_file << "biWidth: " << fileInfoHeader.biWidth << std::endl;
+    logger_file << "biHeight: " << fileInfoHeader.biHeight << std::endl;
 
     int new_row_size = std::floor((fileInfoHeader.biBitCount * outputWidth + 31) / 32) * 4;
 
@@ -77,32 +91,57 @@ void rotate_nn(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int 
     std::vector<char> pixels(row_size * height + width * colorsChannels);
     input_file.read(pixels.data(), row_size * height + width * colorsChannels);
 
+    logger_file << "Размер вектора pixels исходного изображения: " << pixels.size() << std::endl << std::endl;
+
     std::vector<char> new_pixels(new_row_size * outputHeight + outputWidth * colorsChannels);
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
+    logger_file << "Цвета пикселей по координатам:" << std::endl;
+
     double cx = outputWidth / 2;
     double cy = outputHeight / 2;
+    int null_pixels_count = 0;
+    int not_null_pixels_count = 0;
     for (int i = 0; i < outputHeight; ++i) {
         for (int j = 0; j < outputWidth; ++j) {
             double x = (j - cx) * cos(radian) - (i - cy) * sin(radian) + width / 2;
             double y = (j - cx) * sin(radian) + (i - cy) * cos(radian) + height / 2;
 
+            logger_file << "(" << j << ";" << i << ")" << ": ";
             if (x >= 0 && x < width && y >= 0 && y < height) {
+                not_null_pixels_count++;
                 for (int k = 0; k < colorsChannels; k++) {
                     new_pixels[i * new_row_size + j * colorsChannels + k] = pixels[(int)y * row_size + (int)x * colorsChannels + k];
+                    logger_file << (int)(unsigned char)new_pixels[i * new_row_size + j * colorsChannels + k] << " ";
                 }
             }
+            else { 
+                null_pixels_count++; 
+                for (int k = 0; k < colorsChannels; k++) {
+                    logger_file << "0 ";
+                }
+            }
+            logger_file << std::endl;
         }
     }
+
+    logger_file << std::endl;
+
 
     auto endTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = endTime - startTime;
 
     output_file.write(new_pixels.data(), new_row_size * outputHeight + outputWidth * colorsChannels);
 
+    logger_file << "Размер вектора new_pixels нового изображения: " << new_pixels.size() << std::endl;
+    logger_file << "Количество ненулевых пикселей в новом изображении: " << not_null_pixels_count << std::endl;
+    logger_file << "Количество нулевых пикселей в новом изображении: " << null_pixels_count << std::endl;
+    logger_file << "Время создания изображения: " << duration.count() << std::endl;
+
     std::cout << "New image has been successfully created using rotate_nn for " << duration.count() << " seconds" << std::endl;
 
+    logger_file.close();
     input_file.close();
     output_file.close();
 }
@@ -125,6 +164,16 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     BITMAPINFOHEADER fileInfoHeader;
     input_file.read((char*)&fileInfoHeader, sizeof(fileInfoHeader));
 
+    std::ofstream logger_file("logger_bln.txt");
+
+    std::cout << "LOGGING bln_integpolation....." << std::endl;
+
+    logger_file << "Логи для билинейной интерполяции: " << std::endl << std::endl;
+    logger_file << "Поворот выполняется на угол: " << angle << std::endl;
+    logger_file << "Начальные значения ширины и высоты изображения:" << std::endl;
+    logger_file << "biWidth: " << fileInfoHeader.biWidth << std::endl;
+    logger_file << "biHeight: " << fileInfoHeader.biHeight << std::endl;
+
     int pixelsOffset = fileHeader.bfOffBits;
     int colorsChannels = fileInfoHeader.biBitCount / 8;
     int width = fileInfoHeader.biWidth;
@@ -139,11 +188,14 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     fileInfoHeader.biWidth = outputWidth;
     fileInfoHeader.biHeight = outputHeight;
 
+    logger_file << "Новые значения ширины и высоты изображения:" << std::endl;
+    logger_file << "biWidth: " << fileInfoHeader.biWidth << std::endl;
+    logger_file << "biHeight: " << fileInfoHeader.biHeight << std::endl;
+
     int new_row_size = std::floor((fileInfoHeader.biBitCount * outputWidth + 31) / 32) * 4;
 
     output_file.write((char*)&fileHeader, sizeof(fileHeader));
     output_file.write((char*)&fileInfoHeader, sizeof(fileInfoHeader));
-
 
     char* temp_info = new char[pixelsOffset - 54];
     input_file.read(temp_info, pixelsOffset - 54);
@@ -154,12 +206,18 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     std::vector<char> pixels(row_size * height + width * colorsChannels);
     input_file.read(pixels.data(), row_size * height + width * colorsChannels);
 
+    logger_file << "Размер вектора pixels исходного изображения: " << pixels.size() << std::endl << std::endl;
+
     std::vector<char> new_pixels(new_row_size * outputHeight + outputWidth * colorsChannels);
 
     auto startTime = std::chrono::high_resolution_clock::now();
 
+    logger_file << "Цвета пикселей по координатам:" << std::endl;
+
     double cx = outputWidth / 2;
     double cy = outputHeight / 2;
+    int null_pixels_count = 0;
+    int not_null_pixels_count = 0;
     for (int i = 0; i < outputHeight; ++i) {
         for (int j = 0; j < outputWidth; ++j) {
             double x = (j - cx) * std::cos(radian) - (i - cy) * std::sin(radian) + width / 2;
@@ -177,7 +235,9 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
             double w10 = dx * (1 - dy);
             double w11 = dx * dy;
 
+            logger_file << "(" << j << ";" << i << ")" << ": ";
             if (x >= 0 && x < width && y >= 0 && y < height) {
+                not_null_pixels_count++;
                 for (int k = 0; k < colorsChannels; k++) {
                     new_pixels[i * new_row_size + j * colorsChannels + k] = round(
                         w00 * pixels[y0 * row_size + x0 * colorsChannels + k] +
@@ -185,18 +245,33 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
                         w10 * pixels[y0 * row_size + x0 * colorsChannels + k] +
                         w11 * pixels[y0 * row_size + x0 * colorsChannels + k]
                     );
+                    logger_file << (int)(unsigned char)new_pixels[i * new_row_size + j * colorsChannels + k] << " ";
                 }
             }
+            else {
+                null_pixels_count++;
+                for (int k = 0; k < colorsChannels; k++) {
+                    logger_file << "0 ";
+                }
+            }
+            logger_file << std::endl;
         }
     }
+
+    logger_file << std::endl;
 
     auto endTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = endTime - startTime;
 
     output_file.write(new_pixels.data(), new_row_size * outputHeight + outputWidth * colorsChannels);
+    logger_file << "Размер вектора new_pixels нового изображения: " << new_pixels.size() << std::endl;
+    logger_file << "Количество ненулевых пикселей в новом изображении: " << not_null_pixels_count << std::endl;
+    logger_file << "Количество нулевых пикселей в новом изображении: " << null_pixels_count << std::endl;
+    logger_file << "Время создания изображения: " << duration.count() << std::endl;
 
     std::cout << "New image has been successfully created using rotate_bln for " << duration.count() << " seconds" << std::endl;
 
+    logger_file.close();
     input_file.close();
     output_file.close();
 }
