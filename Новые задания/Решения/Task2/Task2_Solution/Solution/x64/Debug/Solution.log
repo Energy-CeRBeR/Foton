@@ -1,4 +1,0 @@
-﻿  Solution.cpp
-C:\Foton\Новые задания\Решения\Task2\Task2_Solution\Solution\Solution.cpp(92,18): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Foton\Новые задания\Решения\Task2\Task2_Solution\Solution\Solution.cpp(93,18): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-  Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task2\Task2_Solution\x64\Debug\Solution.exe

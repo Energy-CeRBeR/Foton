@@ -1,6 +1,0 @@
-﻿  Solution.cpp
-C:\Foton\Новые задания\Решения\Task7\Task7_Solution\Solution\Solution.cpp(55,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task7\Task7_Solution\Solution\Solution.cpp(59,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task7\Task7_Solution\Solution\Solution.cpp(126,18): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task7\Task7_Solution\Solution\Solution.cpp(130,22): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-  Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task7\Task7_Solution\x64\Debug\Solution.exe
