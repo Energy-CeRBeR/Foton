@@ -36,11 +36,6 @@ struct BITMAPINFOHEADER {
 };
 
 
-struct Pixel {
-    char r, g, b;
-};
-
-
 std::ifstream input_file;
 std::ofstream output_file;
 BITMAPFILEHEADER fileHeader;
@@ -93,7 +88,7 @@ void rotate_thread(int thread_id, int num_threads, int cur_x, int cur_y) {
 }
 
 
-void read_pixels(int cur_x, int cur_y) {
+void read_data(int cur_x, int cur_y) {
     tile_pixels.resize(tile_size * new_row_size + tile_size * colorsChannels);
     for (int i = cur_y * tile_size; i < std::min((cur_y + 1) * tile_size, outputHeight); i++) {
         for (int j = cur_x * tile_size; j < std::min((cur_x + 1) * tile_size, outputWidth); j++) {
@@ -128,7 +123,7 @@ void read_pixels(int cur_x, int cur_y) {
 }
 
 
-void write_pixels(int i, int j) {
+void write_data(int i, int j) {
     for (int q = 0; q < tile_size; q++) {
         for (int p = 0; p < tile_size; p++) {
             if (i * tile_size + q < outputHeight && j * tile_size + p < outputWidth) {
@@ -187,49 +182,54 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     cx = outputWidth / 2;
     cy = outputHeight / 2;
 
-    auto startTime = std::chrono::high_resolution_clock::now();
+    int width_tiles_counter = outputWidth / tile_size + 1; 
+    int height_tiles_counter = outputHeight / tile_size + 1;
 
     int num_threads = std::thread::hardware_concurrency();
-    int width_tiles_counter = outputWidth / tile_size + 1; //+ (int)(outputWidth % tile_size != 0);
-    int height_tiles_counter = outputHeight / tile_size + 1; //+ (int)(outputHeight % tile_size != 0);
-    std::cout << width << " " << height << std::endl;
-    std::cout << outputWidth << " " << outputHeight << std::endl;
-    std::cout << width_tiles_counter << " " << height_tiles_counter << std::endl;
-    //int width_tiles_counter = 6; //+ (int)(outputWidth % tile_size != 0);
-    //int height_tiles_counter = 6; //+ (int)(outputHeight % tile_size != 0);
-
     std::vector<std::thread> threads;
     current_pixels.resize(new_row_size * tile_size + tile_size * colorsChannels);
 
-    int count = 0;
-    std::cout << "Total number of tiles: " << width_tiles_counter * height_tiles_counter << std::endl;
+    double time_to_read = 0.0;
+    double time_to_rotate = 0.0;
+    double time_to_write = 0.0;
     for (int i = 0; i < height_tiles_counter; i++) {
         for (int j = 0; j < width_tiles_counter; j++) {
-            read_pixels(j, i);
+            auto startReadTime = std::chrono::high_resolution_clock::now();
+            read_data(j, i);
+            auto endReadTime = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> durationRead = endReadTime - startReadTime;
+            time_to_read += durationRead.count();
 
+            auto startRotateTime = std::chrono::high_resolution_clock::now();
             for (int k = 0; k < num_threads; ++k) {
-                //rotate_thread(k, num_threads, j, i);
                 threads.push_back(std::thread(rotate_thread, k, num_threads, j, i));
             }
             for (auto& thread : threads) {
                 thread.join();
             }
             threads.clear();
-            
-            write_pixels(i, j);
-            
-            count++;
-            std::cout << "Processed " << count << " tiles" << std::endl;
+            auto endRotateTime = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> durationRotate = endRotateTime - startRotateTime;
+            time_to_rotate += durationRotate.count();
+
+            auto startWriteTime = std::chrono::high_resolution_clock::now();
+            write_data(i, j);
+            auto endWriteTime = std::chrono::high_resolution_clock::now();
+            std::chrono::duration<double> durationWrite = endWriteTime - startWriteTime;
+            time_to_write += durationWrite.count();
         }
     }
 
-    auto endTime = std::chrono::high_resolution_clock::now();
-    std::chrono::duration<double> duration = endTime - startTime;
-    std::cout << "New image has been successfully created using rotate_bln for " << duration.count() << " seconds" << std::endl;
+    std::cout << "New image has been successfully created!" << std::endl;
+    std::cout << "Total data reading time: " << time_to_read << " seconds" << std::endl;
+    std::cout << "Total image rotation time: " << time_to_rotate << " seconds" << std::endl;
+    std::cout << "Total data writing time: " << time_to_write << " seconds" << std::endl;
+
 
     input_file.close();
     output_file.close();
 }
+
 
 int main(int argc, char* argv[]) {
     if (argc < 5) {
@@ -246,6 +246,7 @@ int main(int argc, char* argv[]) {
     tile_size = std::stoi(str_tile_size);
 
     rotate_bln(INPUT_PATH, OUTPUT_PATH, angle, tile_size);
+
 
     return 0;
 }
