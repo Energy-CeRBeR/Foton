@@ -37,7 +37,7 @@ struct BITMAPINFOHEADER {
 
 
 struct Pixel {
-    char r, g, b; // Красный, зеленый, синий компоненты
+    char r, g, b;
 };
 
 
@@ -45,8 +45,7 @@ std::ifstream input_file;
 std::ofstream output_file;
 BITMAPFILEHEADER fileHeader;
 BITMAPINFOHEADER fileInfoHeader;
-//std::vector<char> pixels;
-//std::vector<char> new_pixels;
+std::vector<char> tile_pixels;
 std::vector<char> current_pixels;
 int row_size;
 int colorsChannels;
@@ -65,7 +64,38 @@ int tile_size;
 
 void rotate_thread(int thread_id, int num_threads, int cur_x, int cur_y) {
     for (int i = cur_y * tile_size + thread_id; i < std::min((cur_y + 1) * tile_size, outputHeight); i += num_threads) {
-        //std::cout << i << std::endl;
+        for (int j = cur_x * tile_size; j < std::min((cur_x + 1) * tile_size, outputWidth); j++) {
+            double x = (j - cx) * std::cos(radian) - (i - cy) * std::sin(radian) + width / 2;
+            double y = (j - cx) * std::sin(radian) + (i - cy) * std::cos(radian) + height / 2;
+
+            int x0 = floor(x);
+            int y0 = floor(y);
+
+            double dx = x - x0;
+            double dy = y - y0;
+            double w00 = (1 - dx) * (1 - dy);
+            double w01 = (1 - dx) * dy;
+            double w10 = dx * (1 - dy);
+            double w11 = dx * dy;
+
+            if (x >= 0 && x < width && y >= 0 && y < height) {
+                for (int k = 0; k < colorsChannels; k++) {
+                    current_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] = round(
+                        w00 * tile_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] +
+                        w01 * tile_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] +
+                        w10 * tile_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] +
+                        w11 * tile_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k]
+                    );
+                }
+            }
+        }
+    }
+}
+
+
+void read_pixels(int cur_x, int cur_y) {
+    tile_pixels.resize(tile_size * new_row_size + tile_size * colorsChannels);
+    for (int i = cur_y * tile_size; i < std::min((cur_y + 1) * tile_size, outputHeight); i++) {
         for (int j = cur_x * tile_size; j < std::min((cur_x + 1) * tile_size, outputWidth); j++) {
             double x = (j - cx) * std::cos(radian) - (i - cy) * std::sin(radian) + width / 2;
             double y = (j - cx) * std::sin(radian) + (i - cy) * std::cos(radian) + height / 2;
@@ -85,18 +115,35 @@ void rotate_thread(int thread_id, int num_threads, int cur_x, int cur_y) {
                 input_file.seekg(pixelsOffset + y0 * row_size + x0 * colorsChannels, std::ios::beg);
                 input_file.read(pixel.data(), colorsChannels);
                 for (int k = 0; k < colorsChannels; k++) {
-                    //std::cout << (int)(unsigned char)pixel[k] << std::endl;
-                    current_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] = round(
-                        w00 * pixel[k] +
-                        w01 * pixel[k] +
-                        w10 * pixel[k] +
-                        w11 * pixel[k]
-                    );
+                    tile_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] = pixel[k];
+                }
+            }
+            else {
+                for (int k = 0; k < colorsChannels; k++) {
+                    tile_pixels[(i - cur_y * tile_size) * new_row_size + (j - cur_x * tile_size) * colorsChannels + k] = 0;
                 }
             }
         }
     }
 }
+
+
+void write_pixels(int i, int j) {
+    for (int q = 0; q < tile_size; q++) {
+        for (int p = 0; p < tile_size; p++) {
+            if (i * tile_size + q < outputHeight && j * tile_size + p < outputWidth) {
+                output_file.seekp(pixelsOffset + new_row_size * (i * tile_size + q) + (j * tile_size + p) * colorsChannels, std::ios::beg);
+                std::vector<char> pixelll(colorsChannels);
+                for (int k = 0; k < colorsChannels; k++) {
+                    pixelll[k] = current_pixels[q * new_row_size + p * colorsChannels + k];
+                    current_pixels[q * new_row_size + p * colorsChannels + k] = 0;
+                }
+                output_file.write(pixelll.data(), colorsChannels);
+            }
+        }
+    }
+}
+
 
 void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int angle, int tile_size) {
     input_file.open(INPUT_PATH, std::ios::binary);
@@ -137,17 +184,6 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     output_file.write(temp_info, pixelsOffset - 54);
     delete[] temp_info;
 
-    /*for (int i = 0; i < 10000; i++) {
-        std::vector<char> pixel(colorsChannels);
-        input_file.read(pixel.data(), colorsChannels);
-        std::cout << (int)(unsigned char)pixel[2] << " " << (int)(unsigned char)pixel[1] << " " << (int)(unsigned char)pixel[0] << std::endl;
-    }*/
-
-    //pixels.resize(row_size * height + width * colorsChannels);
-    //input_file.read(pixels.data(), row_size * height + width * colorsChannels);
-
-    //new_pixels.resize(new_row_size * outputHeight + outputWidth * colorsChannels);
-
     cx = outputWidth / 2;
     cy = outputHeight / 2;
 
@@ -159,8 +195,8 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     std::cout << width << " " << height << std::endl;
     std::cout << outputWidth << " " << outputHeight << std::endl;
     std::cout << width_tiles_counter << " " << height_tiles_counter << std::endl;
-    //int width_tiles_counter = 3; //+ (int)(outputWidth % tile_size != 0);
-    //int height_tiles_counter = 2; //+ (int)(outputHeight % tile_size != 0);
+    //int width_tiles_counter = 6; //+ (int)(outputWidth % tile_size != 0);
+    //int height_tiles_counter = 6; //+ (int)(outputHeight % tile_size != 0);
 
     std::vector<std::thread> threads;
     current_pixels.resize(new_row_size * tile_size + tile_size * colorsChannels);
@@ -169,45 +205,26 @@ void rotate_bln(const std::string INPUT_PATH, const std::string OUTPUT_PATH, int
     std::cout << "Total number of tiles: " << width_tiles_counter * height_tiles_counter << std::endl;
     for (int i = 0; i < height_tiles_counter; i++) {
         for (int j = 0; j < width_tiles_counter; j++) {
+            read_pixels(j, i);
 
-            //output_file.seekp(pixelsOffset + new_row_size * i * tile_size + j * tile_size * colorsChannels, std::ios::beg);
             for (int k = 0; k < num_threads; ++k) {
-                //rotate_thread(k, num_threads, j, i, input_file);
+                //rotate_thread(k, num_threads, j, i);
                 threads.push_back(std::thread(rotate_thread, k, num_threads, j, i));
             }
-
-            
-            //std::cout << count << std::endl;
-            //output_file.write(current_pixels.data(), new_row_size * tile_size + tile_size * colorsChannels);  
-            for (int q = 0; q < tile_size; q++) {
-                for (int p = 0; p < tile_size; p++) {
-                    if (i * tile_size + q < outputHeight && j * tile_size + p < outputWidth) {
-                        output_file.seekp(pixelsOffset + new_row_size * (i * tile_size + q) + (j * tile_size + p) * colorsChannels, std::ios::beg);
-                        std::vector<char> pixelll(colorsChannels);
-                        for (int k = 0; k < colorsChannels; k++) {
-                            pixelll[k] = current_pixels[q * new_row_size + p * colorsChannels + k];
-                            current_pixels[q * new_row_size + p * colorsChannels + k] = 0;
-                        }
-                        output_file.write(pixelll.data(), colorsChannels);
-                    }
-                }
+            for (auto& thread : threads) {
+                thread.join();
             }
-            //write_to_file();
+            threads.clear();
+            
+            write_pixels(i, j);
+            
             count++;
-            //current_pixels.clear();
-            //current_pixels.resize(new_row_size * tile_size + tile_size * colorsChannels);
             std::cout << "Processed " << count << " tiles" << std::endl;
         }
-    }
-    for (auto& thread : threads) {
-        thread.join();
     }
 
     auto endTime = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration = endTime - startTime;
-
-    //output_file.write(new_pixels.data(), new_row_size * outputHeight + outputWidth * colorsChannels);
-
     std::cout << "New image has been successfully created using rotate_bln for " << duration.count() << " seconds" << std::endl;
 
     input_file.close();
@@ -232,35 +249,3 @@ int main(int argc, char* argv[]) {
 
     return 0;
 }
-
-
-
-
-
-/*void write_to_file() {
-    for (int i = 0; i < tile_size; i++) {
-        for (int j = 0; j < tile_size; j++) {
-            output_file.seekp(pixelsOffset + new_row_size * i * tile_size + tile_size * colorsChannels, std::ios::beg);
-            std::vector<char> pixelll(colorsChannels);
-            for (int k = 0; k < colorsChannels; k++) {
-                pixelll[k] = current_pixels[i * new_row_size + j * colorsChannels + k];
-            }
-            output_file.write(pixelll.data(), colorsChannels);
-        }
-     }
-}*/
-
-
-/*std::vector<char> load_base_pixels(int cur_x, int cur_y, std::ifstream& input_file) {
-    std::vector<char> base_pixels(row_size * tile_size + tile_size * colorsChannels);
-    for (int i = cur_y * tile_size; i < std::min((cur_y + 1) * tile_size, outputHeight); i++) {
-        //std::cout << i << std::endl;
-        for (int j = cur_x * tile_size; j < std::min((cur_x + 1) * tile_size, outputWidth); j++) {
-            double x = (j - cx) * std::cos(radian) - (i - cy) * std::sin(radian) + width / 2;
-            double y = (j - cx) * std::sin(radian) + (i - cy) * std::cos(radian) + height / 2;
-
-            int x0 = floor(x);
-            int y0 = floor(y);
-
-
-}*/

@@ -1,14 +1,16 @@
 ﻿  Solution.cpp
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(73,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(74,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(89,130): warning C4244: =: преобразование "double" в "_Ty", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(71,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(72,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(83,130): warning C4244: =: преобразование "double" в "_Ty", возможна потеря данных
           with
           [
               _Ty=char
           ]
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(119,74): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(123,22): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(124,23): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(129,84): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(130,83): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(103,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(104,20): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(166,74): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(170,22): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(171,23): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(176,84): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task12\Task12_Solution\Solution\Solution.cpp(177,83): warning C4244: =: преобразование "double" в "int", возможна потеря данных
   Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task12\Task12_Solution\x64\Debug\Solution.exe
