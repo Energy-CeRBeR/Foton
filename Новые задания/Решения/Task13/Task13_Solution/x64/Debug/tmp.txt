@@ -1,0 +1,33 @@
+if (i < k / 2 || j < k / 2 || i >= height + k / 2 || j >= width + k / 2) {
+    if (i < k / 2 && j < k / 2) {
+        for (int c = 0; c < colorsChannels; c++) {
+            new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[0];
+        }
+    }
+    else if (i < k / 2) {
+        for (int c = 0; c < colorsChannels; c++) {
+            new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((j - k / 2), width - 1) * colorsChannels + c];
+        }
+    }
+    else {
+        for (int c = 0; c < colorsChannels; c++) {
+            new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((i - k / 2), height - 1) * row_size + c];
+        }
+    }
+}
+else if (i >= height + k / 2 || j >= width + k / 2) {
+    if (i >= height + k / 2 && j >= width + k / 2) {
+        for (int c = 0; c < colorsChannels; c++) {
+            new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[(height - 1) * row_size + (width - 1) * colorsChannels];
+        }
+    }
+    else if (i >= height + k / 2) {
+        for (int c = 0; c < colorsChannels; c++) {
+            new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((j - k / 2), width - 1) * colorsChannels + c];
+        }
+    }
+    else {
+        for (int c = 0; c < colorsChannels; c++) {
+            new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((i - k / 2), height - 1) * row_size + c];
+        }
+    }

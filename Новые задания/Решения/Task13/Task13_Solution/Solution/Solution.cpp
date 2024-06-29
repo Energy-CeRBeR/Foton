@@ -54,20 +54,19 @@ void write_header(std::ifstream &input_file, std::ofstream &output_file, BITMAPF
 }
 
 
-void filter_with_add_null(std::ofstream& output_file, const std::vector<char> &pixels) {
+void filter_image(std::ofstream& output_file, const std::vector<char> &pixels) {
     std::vector<char> new_pixels(row_size * height + width * colorsChannels);
     for (int i = 0; i < height; i++) {
         for (int j = 0; j < width; j++) {
             std::vector<double> average(colorsChannels);
             for (int a = i - k / 2; a <= i + k / 2; a++) {
                 for (int b = j - k / 2; b <= j + k / 2; b++) {
-                    //std::cout << a + k / 2 << " " << b + k / 2 << "\t" << new_height << " " << new_width << std::endl;
                     for (int c = 0; c < colorsChannels; c++) {
                         average[c] += (int)(unsigned char)pixels[(a + k / 2) * new_row_size + (b + k / 2) * colorsChannels + c];
                     }
                 }
             }
-            //std::cout << i << " " << j << std::endl;
+
             for (int c = 0; c < colorsChannels; c++) {
                 average[c] /= (double)(k * k);
                 new_pixels[i * row_size + j * colorsChannels + c] = average[c];
@@ -76,13 +75,14 @@ void filter_with_add_null(std::ofstream& output_file, const std::vector<char> &p
     }
 
     output_file.write(new_pixels.data(), row_size * height + width * colorsChannels);
-    std::cout << "SUCCESS_1" << std::endl;
+    std::cout << "SUCCESS" << std::endl;
+
+    output_file.close();
 }
 
 
 std::vector<char> create_pixels_vector_with_null(const std::vector<char> &pixels) {
     std::vector<char> new_pixels(new_row_size * new_height + new_width * colorsChannels);
-    //std::cout << height << " " << width << std::endl;
     for (int i = 0; i < height + k; i++) {
         for (int j = 0; j < width + k; j++) {
             if (i < k / 2 || j < k / 2 || i >= height + k / 2 || j >= width + k / 2) {
@@ -91,7 +91,6 @@ std::vector<char> create_pixels_vector_with_null(const std::vector<char> &pixels
                 }
             }
             else {
-                //std::cout << i - k / 2 << " " << j - k / 2 << "\t" << height << " " << width << std::endl;
                 for (int c = 0; c < colorsChannels; c++) {
                     new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[(i - k / 2) * row_size + (j - k / 2) * colorsChannels + c];
                 }
@@ -105,51 +104,56 @@ std::vector<char> create_pixels_vector_with_null(const std::vector<char> &pixels
 
 std::vector<char> create_pixels_vector_with_add_str_col(const std::vector<char>& pixels) {
     std::vector<char> new_pixels(new_row_size * new_height + new_width * colorsChannels);
-    //std::cout << height << " " << width << std::endl;
     for (int i = 0; i < height + k; i++) {
         for (int j = 0; j < width + k; j++) {
-            //if (i < k / 2 || j < k / 2 || i >= height + k / 2 || j >= width + k / 2) {
-            if (i < k / 2 || j < k / 2) {
-                if (i < k / 2 && j < k / 2) {
-                    for (int c = 0; c < colorsChannels; c++) {
-                        new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[0];
-                    }
-                }
-                else if (i < k / 2) {
-                    for (int c = 0; c < colorsChannels; c++) {
-                        new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((j - k / 2), width - 1) * colorsChannels + c];
-                    }
-                }
-                else {
-                    for (int c = 0; c < colorsChannels; c++) {
-                        new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((i - k / 2), height - 1) * row_size + c];
-                    }
-                }
+            int i_2 = i - k / 2;
+            int j_2 = j - k / 2;
+
+            if (i < k / 2) {
+                i_2 = 0;
             }
-            if (i >= height + k / 2 || j >= width + k / 2) {
-                if (i >= height + k / 2 && j >= width + k / 2) {
-                    for (int c = 0; c < colorsChannels; c++) {
-                        new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[(height - 1) * row_size + (width - 1) * colorsChannels];
-                    }
-                }
-                else if (i < k / 2) {
-                    for (int c = 0; c < colorsChannels; c++) {
-                        new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((j - k / 2), width - 1) * colorsChannels + c];
-                    }
-                }
-                else {
-                    for (int c = 0; c < colorsChannels; c++) {
-                        new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[std::min((i - k / 2), height - 1) * row_size + c];
-                    }
-                }
+            if (j < k / 2) {
+                j_2 = 0;
             }
-                
-                
-            else {
-                //std::cout << i - k / 2 << " " << j - k / 2 << "\t" << height << " " << width << std::endl;
-                for (int c = 0; c < colorsChannels; c++) {
-                    new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[(i - k / 2) * row_size + (j - k / 2) * colorsChannels + c];
-                }
+            if (i >= height + k / 2) {
+                i_2 = height - 1;
+            }
+            if (j >= width + k / 2) {
+                j_2 = width - 1;
+            }
+
+            for (int c = 0; c < colorsChannels; c++) {
+                new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[i_2 * row_size + j_2 * colorsChannels + c];
+            }
+        }
+    }
+
+    return new_pixels;
+}
+
+
+std::vector<char> create_pixels_vector_with_add_mirror_reflection(const std::vector<char>& pixels) {
+    std::vector<char> new_pixels(new_row_size * new_height + new_width * colorsChannels);
+    for (int i = 0; i < height + k; i++) {
+        for (int j = 0; j < width + k; j++) {
+            int i_2 = i - k / 2;
+            int j_2 = j - k / 2;
+
+            if (i < k / 2) {
+                i_2 = (k / 2 - i);
+            }
+            if (j < k / 2) {
+                j_2 = (k / 2 - j);
+            }
+            if (i >= height + k / 2) {
+                i_2 = i - k - 1;
+            }
+            if (j >= width + k / 2) {
+                j_2 = j - k - 1;
+            }
+
+            for (int c = 0; c < colorsChannels; c++) {
+                new_pixels[i * new_row_size + j * colorsChannels + c] = pixels[i_2 * row_size + j_2 * colorsChannels + c];
             }
         }
     }
@@ -206,14 +210,16 @@ void medianFilter(const std::string INPUT_PATH, const std::string OUTPUT_PATH) {
     std::vector<char> pixels(row_size * height + width * colorsChannels);
     input_file.read(pixels.data(), row_size * height + width * colorsChannels);
 
-    std::vector<char> special_pixels_1 = create_pixels_vector_with_null(pixels);
-    filter_with_add_null(output_file_1, special_pixels_1);
-
-
     input_file.close();
-    output_file_1.close();
-    output_file_2.close();
-    output_file_3.close();
+
+    std::vector<char> special_pixels_1 = create_pixels_vector_with_null(pixels);
+    filter_image(output_file_1, special_pixels_1);
+
+    std::vector<char> special_pixels_2 = create_pixels_vector_with_add_str_col(pixels);
+    filter_image(output_file_2, special_pixels_2);
+
+    std::vector<char> special_pixels_3 = create_pixels_vector_with_add_mirror_reflection(pixels);
+    filter_image(output_file_3, special_pixels_3);
 }
 
 
@@ -230,9 +236,5 @@ int main(int argc, char* argv[]) {
        
     medianFilter(INPUT_PATH, OUTPUT_PATH);
 
-
     return 0;
 }
-
-
-
