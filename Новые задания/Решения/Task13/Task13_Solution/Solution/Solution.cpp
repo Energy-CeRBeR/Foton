@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <chrono>
 
 #pragma pack(2)
 
@@ -75,8 +76,6 @@ void filter_image(std::ofstream& output_file, const std::vector<char> &pixels) {
     }
 
     output_file.write(new_pixels.data(), row_size * height + width * colorsChannels);
-    std::cout << "SUCCESS" << std::endl;
-
     output_file.close();
 }
 
@@ -212,14 +211,26 @@ void medianFilter(const std::string INPUT_PATH, const std::string OUTPUT_PATH) {
 
     input_file.close();
 
+    auto start_time_1 = std::chrono::high_resolution_clock::now();
     std::vector<char> special_pixels_1 = create_pixels_vector_with_null(pixels);
     filter_image(output_file_1, special_pixels_1);
+    auto end_time_1 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration_1 = end_time_1 - start_time_1;
+    std::cout << "The filter using add zero_pixels was successfully applied in " << duration_1.count() << " seconds" << std::endl;
 
+    auto start_time_2 = std::chrono::high_resolution_clock::now();
     std::vector<char> special_pixels_2 = create_pixels_vector_with_add_str_col(pixels);
     filter_image(output_file_2, special_pixels_2);
+    auto end_time_2 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration_2 = end_time_2 - start_time_2;
+    std::cout << "The filter using add copy strings and columns was successfully applied in " << duration_2.count() << " seconds" << std::endl;
 
+    auto start_time_3 = std::chrono::high_resolution_clock::now();
     std::vector<char> special_pixels_3 = create_pixels_vector_with_add_mirror_reflection(pixels);
     filter_image(output_file_3, special_pixels_3);
+    auto end_time_3 = std::chrono::high_resolution_clock::now();
+    std::chrono::duration<double> duration_3 = end_time_3 - start_time_3;
+    std::cout << "The filter using add mirror reflection was successfully applied in " << duration_3.count() << " seconds" << std::endl;
 }
 
 
