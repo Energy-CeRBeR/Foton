@@ -1,0 +1,58 @@
+﻿  Solution.cpp
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(81,43): warning C4244: аргумент: преобразование "_Ty" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty=int
+          ]
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(83,34): warning C4244: =: преобразование "_Ty" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty=char
+          ]
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(95,47): warning C4244: аргумент: преобразование "_Ty" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty=int
+          ]
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(97,59): warning C4244: =: преобразование "_Ty" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty=char
+          ]
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(115,46): warning C4244: =: преобразование "_Ty" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty=int
+          ]
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(117,78): warning C4244: =: преобразование "_Ty" в "_Ty", возможна потеря данных
+          with
+          [
+              _Ty=double
+          ]
+          and
+          [
+              _Ty=char
+          ]
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(178,74): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Foton\Новые задания\Решения\Task14\Task14_Solution\Solution\Solution.cpp(179,82): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task14\Task14_Solution\x64\Debug\Solution.exe

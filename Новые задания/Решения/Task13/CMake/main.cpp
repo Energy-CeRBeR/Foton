@@ -131,7 +131,7 @@ std::vector<char> create_pixels_vector_with_add_str_col(const std::vector<char>&
 }
 
 
-std::vector<char> create_pixels_vector_with_add_mirror_reflection(const std::vector<char>& pixels) {
+std::vector<char> create_pixels_vector(const std::vector<char>& pixels) {
     std::vector<char> new_pixels(new_row_size * new_height + new_width * colorsChannels);
     for (int i = 0; i < height + k; i++) {
         for (int j = 0; j < width + k; j++) {
@@ -226,7 +226,7 @@ void medianFilter(const std::string INPUT_PATH, const std::string OUTPUT_PATH) {
     std::cout << "The filter using add copy strings and columns was successfully applied in " << duration_2.count() << " seconds" << std::endl;
 
     auto start_time_3 = std::chrono::high_resolution_clock::now();
-    std::vector<char> special_pixels_3 = create_pixels_vector_with_add_mirror_reflection(pixels);
+    std::vector<char> special_pixels_3 = create_pixels_vector(pixels);
     filter_image(output_file_3, special_pixels_3);
     auto end_time_3 = std::chrono::high_resolution_clock::now();
     std::chrono::duration<double> duration_3 = end_time_3 - start_time_3;
