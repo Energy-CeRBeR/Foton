@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Foton\Новые задания\Решения\Task16\CMake\build\CMakeFiles\a7aa3d60a5d901aa5eca97d0e084bd8b\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{0BA73768-A715-36AE-9D3E-FFF66E388106}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

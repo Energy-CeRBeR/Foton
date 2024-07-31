@@ -1,0 +1,10 @@
+^C:\FOTON\НОВЫЕ ЗАДАНИЯ\РЕШЕНИЯ\TASK16\CMAKE\BUILD\CMAKEFILES\A7AA3D60A5D901AA5ECA97D0E084BD8B\GENERATE.STAMP.RULE
+setlocal
+"C:\Program Files\CMake\bin\cmake.exe" "-SC:/Foton/Новые задания/Решения/Task16/CMake" "-BC:/Foton/Новые задания/Решения/Task16/CMake/build" --check-stamp-list CMakeFiles/generate.stamp.list --vs-solution-file "C:/Foton/Новые задания/Решения/Task16/CMake/build/Task16.sln"
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

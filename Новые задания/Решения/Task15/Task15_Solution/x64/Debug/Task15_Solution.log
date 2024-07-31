@@ -1,4 +1,0 @@
-﻿  Task15_Solution.cpp
-C:\Foton\Новые задания\Решения\Task15\Task15_Solution\Task15_Solution.cpp(177,74): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-C:\Foton\Новые задания\Решения\Task15\Task15_Solution\Task15_Solution.cpp(178,82): warning C4244: =: преобразование "double" в "int", возможна потеря данных
-  Task15_Solution.vcxproj -> C:\Foton\Новые задания\Решения\Task15\x64\Debug\Task15_Solution.exe
