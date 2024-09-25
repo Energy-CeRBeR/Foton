@@ -61,6 +61,11 @@ void haar(
     const std::vector<char> &pixels)
 {
 
+    std::ofstream LL_data("LL_data.txt");
+    std::ofstream LH_data("LH_data.txt");
+    std::ofstream HL_data("HL_data.txt");
+    std::ofstream HH_data("HH_data.txt");
+
     std::vector<char> LL_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
     std::vector<char> LH_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
     std::vector<char> HL_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
@@ -70,6 +75,11 @@ void haar(
     {
         for (int j = 0; j < width - 2; j += 2)
         {
+            LL_data << "(";
+            LH_data << "(";
+            HL_data << "(";
+            HH_data << "(";
+
             for (int k = 0; k < colorsChannels; k++)
             {
                 int a = (int)(unsigned char)pixels[i * row_size + j * colorsChannels + k];
@@ -77,17 +87,32 @@ void haar(
                 int c = (int)(unsigned char)pixels[(i + 1) * row_size + j * colorsChannels + k];
                 int d = (int)(unsigned char)pixels[(i + 1) * row_size + (j + 1) * colorsChannels + k];
 
-                int LL = round((a + b + c + d) / 4.0);
+                double LL = (a + b + c + d) / 4.0;
                 int LH = abs(b - a);
                 int HL = abs(c - a);
                 int HH = abs(d - a);
 
-                LL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(LL);
-                LH_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(LH);
-                HL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(HL);
-                HH_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(HH);
+                LL_data << LL << " ";
+                LH_data << LH << " ";
+                HL_data << HL << " ";
+                HH_data << HH << " ";
+
+                LL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(round(LL));
+                LH_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(abs(LH));
+                HL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(abs(HL));
+                HH_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(abs(HH));
             }
+
+            LL_data << ") ";
+            LH_data << ") ";
+            HL_data << ") ";
+            HH_data << ") ";
         }
+
+        LL_data << "\n";
+        LH_data << "\n";
+        HL_data << "\n";
+        HH_data << "\n";
     }
 
     output_LL.write(LL_pixels.data(), new_row_size * (height / 2) + (width / 2) * colorsChannels);
