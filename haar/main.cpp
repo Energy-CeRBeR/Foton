@@ -43,6 +43,7 @@ int colorsChannels;
 int row_size;
 int new_row_size;
 
+// Функция для записи заголовка
 void writeHeader(std::ifstream &input_file, std::ofstream &output_file, BITMAPFILEHEADER &fileHeader, BITMAPINFOHEADER &fileInfoHeader)
 {
     output_file.write((char *)&fileHeader, sizeof(fileHeader));
@@ -55,6 +56,7 @@ void writeHeader(std::ifstream &input_file, std::ofstream &output_file, BITMAPFI
     delete[] temp_info;
 }
 
+// Функция для чтения и записи вещественных данных из текстовых файлов для компонентов
 std::vector<std::vector<double>> get_data_from_txt(std::ifstream &file)
 {
     std::vector<std::vector<double>> data;
@@ -77,6 +79,7 @@ std::vector<std::vector<double>> get_data_from_txt(std::ifstream &file)
     return data;
 }
 
+// Обратное преобразование Хаара
 void inverse_haar(std::string INPUT_PATH)
 {
     std::ifstream haar_component(INPUT_PATH, std::ios::binary);
@@ -112,6 +115,7 @@ void inverse_haar(std::string INPUT_PATH)
     std::vector<std::vector<std::vector<double>>> HL_data;
     std::vector<std::vector<std::vector<double>>> HH_data;
 
+    // Чтение данных из текстовых файлов
     for (int k = 1; k < colorsChannels + 1; ++k)
     {
         std::cout << "Getting " << k << "th image channel components: " << std::endl
@@ -145,7 +149,8 @@ void inverse_haar(std::string INPUT_PATH)
     std::cout << "All data has been uploaded successfully!" << std::endl
               << std::endl;
 
-    for (int i = 0; i < height - 1; i++)
+    // Применение алгоритма
+    for (int i = 0; i < height; i++)
     {
         for (int j = 0; j < width; j++)
         {
@@ -171,11 +176,12 @@ void inverse_haar(std::string INPUT_PATH)
 
     inverse_result.write(pixels.data(), new_row_size * 2 * height + 2 * width * colorsChannels);
 
-    std::cout << "SUCCESS!!!" << std::endl;
+    std::cout << "The reverse conversion has been completed successfully!" << std::endl;
 
     inverse_result.close();
 }
 
+// Прямое преобразование Хаара
 void haar(
     std::ofstream &output_LL,
     std::ofstream &output_LH,
@@ -265,6 +271,7 @@ void haar(
     output_HH.close();
 }
 
+// Подготовка к прямому преобразованию Хаара
 void run_transform(const std::string INPUT_PATH)
 {
     std::ifstream input_file(INPUT_PATH, std::ios::binary);
@@ -308,7 +315,7 @@ void run_transform(const std::string INPUT_PATH)
 
     haar(output_LL, output_LH, output_HL, output_HH, pixels);
 
-    std::cout << "SUCCESS!!!" << std::endl;
+    std::cout << "The direct conversion has been completed successfully!" << std::endl;
 }
 
 int main(int argc, char *argv[])
