@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <sstream>
+#include <memory>
 
 #pragma pack(2)
 
@@ -53,31 +54,6 @@ void writeHeader(std::ifstream &input_file, std::ofstream &output_file, BITMAPFI
     output_file.write(temp_info, pixelsOffset - 54);
     delete[] temp_info;
 }
-
-// std::vector<std::vector<char>> read_four_components(
-//     std::ifstream &LL_component,
-//     std::ifstream &LH_component,
-//     std::ifstream &HL_component,
-//     std::ifstream &HH_component,
-//     std::ofstream &inverse_result)
-// {
-
-//     std::vector<char> LL_pixels(row_size * height + width * colorsChannels);
-//     LL_component.read(LL_pixels.data(), row_size * height + width * colorsChannels);
-//     LL_component.close();
-
-//     std::vector<char> LH_pixels(row_size * height + width * colorsChannels);
-//     LH_component.read(LH_pixels.data(), row_size * height + width * colorsChannels);
-//     LH_component.close();
-
-//     std::vector<char> HL_pixels(row_size * height + width * colorsChannels);
-//     HL_component.read(HL_pixels.data(), row_size * height + width * colorsChannels);
-//     HL_component.close();
-
-//     std::vector<char> HH_pixels(row_size * height + width * colorsChannels);
-//     HH_component.read(HH_pixels.data(), row_size * height + width * colorsChannels);
-//     HH_component.close();
-// }
 
 std::vector<std::vector<double>> get_data_from_txt(std::ifstream &file)
 {
@@ -131,29 +107,40 @@ void inverse_haar(std::string INPUT_PATH)
     writeHeader(haar_component, inverse_result, fileHeader, fileInfoHeader);
     std::vector<char> pixels(new_row_size * 2 * height + 2 * width * colorsChannels);
 
-    std::cout << "Getting LL_component data ..." << std::endl;
-    std::ifstream LL_txt_file("LL_data.txt");
-    std::vector<std::vector<double>> LL_data = get_data_from_txt(LL_txt_file);
-    std::cout << "LL_component data received!" << std::endl
-              << std::endl;
+    std::vector<std::vector<std::vector<double>>> LL_data;
+    std::vector<std::vector<std::vector<double>>> LH_data;
+    std::vector<std::vector<std::vector<double>>> HL_data;
+    std::vector<std::vector<std::vector<double>>> HH_data;
 
-    std::cout << "Getting LH_component data ..." << std::endl;
-    std::ifstream LH_txt_file("LH_data.txt");
-    std::vector<std::vector<double>> LH_data = get_data_from_txt(LH_txt_file);
-    std::cout << "LH_component data received!" << std::endl
-              << std::endl;
+    for (int k = 1; k < colorsChannels + 1; ++k)
+    {
+        std::cout << "Getting " << k << "th image channel components: " << std::endl
+                  << std::endl;
 
-    std::cout << "Getting HL_component data ..." << std::endl;
-    std::ifstream HL_txt_file("HL_data.txt");
-    std::vector<std::vector<double>> HL_data = get_data_from_txt(HL_txt_file);
-    std::cout << "HL_component data received!" << std::endl
-              << std::endl;
+        std::cout << "Getting LL_component data ..." << std::endl;
+        std::ifstream LL_txt_file("txt_data/LL_data_" + std::to_string(k) + ".txt");
+        LL_data.push_back(get_data_from_txt(LL_txt_file));
+        std::cout << "LL_component data received!" << std::endl
+                  << std::endl;
 
-    std::cout << "Getting HH_component data ..." << std::endl;
-    std::ifstream HH_txt_file("HH_data.txt");
-    std::vector<std::vector<double>> HH_data = get_data_from_txt(HH_txt_file);
-    std::cout << "HH_component data received!" << std::endl
-              << std::endl;
+        std::cout << "Getting LH_component data ..." << std::endl;
+        std::ifstream LH_txt_file("txt_data/LH_data_" + std::to_string(k) + ".txt");
+        LH_data.push_back(get_data_from_txt(LH_txt_file));
+        std::cout << "LH_component data received!" << std::endl
+                  << std::endl;
+
+        std::cout << "Getting HL_component data ..." << std::endl;
+        std::ifstream HL_txt_file("txt_data/HL_data_" + std::to_string(k) + ".txt");
+        HL_data.push_back(get_data_from_txt(HL_txt_file));
+        std::cout << "HL_component data received!" << std::endl
+                  << std::endl;
+
+        std::cout << "Getting HH_component data ..." << std::endl;
+        std::ifstream HH_txt_file("txt_data/HH_data_" + std::to_string(k) + ".txt");
+        HH_data.push_back(get_data_from_txt(HH_txt_file));
+        std::cout << "HH_component data received!" << std::endl
+                  << std::endl;
+    }
 
     std::cout << "All data has been uploaded successfully!" << std::endl
               << std::endl;
@@ -164,10 +151,10 @@ void inverse_haar(std::string INPUT_PATH)
         {
             for (int k = 0; k < colorsChannels; k++)
             {
-                double x = LL_data[i][j];
-                double y = LH_data[i][j];
-                double z = HL_data[i][j];
-                double w = HH_data[i][j];
+                double x = LL_data[k][i][j];
+                double y = LH_data[k][i][j];
+                double z = HL_data[k][i][j];
+                double w = HH_data[k][i][j];
 
                 double a = x - (y + z + w) / 4;
                 double b = a + y;
@@ -197,10 +184,23 @@ void haar(
     const std::vector<char> &pixels)
 {
 
-    std::ofstream LL_data("LL_data.txt");
-    std::ofstream LH_data("LH_data.txt");
-    std::ofstream HL_data("HL_data.txt");
-    std::ofstream HH_data("HH_data.txt");
+    std::vector<std::shared_ptr<std::ofstream>> LL_data;
+    std::vector<std::shared_ptr<std::ofstream>> LH_data;
+    std::vector<std::shared_ptr<std::ofstream>> HL_data;
+    std::vector<std::shared_ptr<std::ofstream>> HH_data;
+
+    for (int k = 1; k < colorsChannels + 1; ++k)
+    {
+        auto LL_k = std::make_shared<std::ofstream>("txt_data/LL_data_" + std::to_string(k) + ".txt");
+        auto LH_k = std::make_shared<std::ofstream>("txt_data/LH_data_" + std::to_string(k) + ".txt");
+        auto HL_k = std::make_shared<std::ofstream>("txt_data/HL_data_" + std::to_string(k) + ".txt");
+        auto HH_k = std::make_shared<std::ofstream>("txt_data/HH_data_" + std::to_string(k) + ".txt");
+
+        LL_data.push_back(LL_k);
+        LH_data.push_back(LH_k);
+        HL_data.push_back(HL_k);
+        HH_data.push_back(HH_k);
+    }
 
     std::vector<char> LL_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
     std::vector<char> LH_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
@@ -224,10 +224,10 @@ void haar(
                 int HL = c - a;
                 int HH = d - a;
 
-                LL_data << LL << " ";
-                LH_data << LH << " ";
-                HL_data << HL << " ";
-                HH_data << HH << " ";
+                *LL_data[k] << LL << " ";
+                *LH_data[k] << LH << " ";
+                *HL_data[k] << HL << " ";
+                *HH_data[k] << HH << " ";
                 count++;
 
                 LL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(round(LL));
@@ -237,10 +237,21 @@ void haar(
             }
         }
 
-        LL_data << "\n";
-        LH_data << "\n";
-        HL_data << "\n";
-        HH_data << "\n";
+        for (int k = 0; k < colorsChannels; ++k)
+        {
+            *LL_data[k] << "\n";
+            *LH_data[k] << "\n";
+            *HL_data[k] << "\n";
+            *HH_data[k] << "\n";
+        }
+    }
+
+    for (int k = 0; k < colorsChannels; ++k)
+    {
+        LL_data[k]->close();
+        LH_data[k]->close();
+        HL_data[k]->close();
+        HH_data[k]->close();
     }
 
     output_LL.write(LL_pixels.data(), new_row_size * (height / 2) + (width / 2) * colorsChannels);
@@ -280,10 +291,10 @@ void run_transform(const std::string INPUT_PATH)
     fileInfoHeader.biWidth /= 2;
     fileInfoHeader.biHeight /= 2;
 
-    std::ofstream output_LL("LL.bmp", std::ios::binary);
-    std::ofstream output_LH("LH.bmp", std::ios::binary);
-    std::ofstream output_HL("HL.bmp", std::ios::binary);
-    std::ofstream output_HH("HH.bmp", std::ios::binary);
+    std::ofstream output_LL("4_components/LL.bmp", std::ios::binary);
+    std::ofstream output_LH("4_components/LH.bmp", std::ios::binary);
+    std::ofstream output_HL("4_components/HL.bmp", std::ios::binary);
+    std::ofstream output_HH("4_components/HH.bmp", std::ios::binary);
 
     writeHeader(input_file, output_LL, fileHeader, fileInfoHeader);
     writeHeader(input_file, output_LH, fileHeader, fileInfoHeader);
