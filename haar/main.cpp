@@ -53,6 +53,7 @@ void writeHeader(std::ifstream &input_file, std::ofstream &output_file, BITMAPFI
     input_file.seekg(54);
     input_file.read(temp_info, pixelsOffset - 54);
     output_file.write(temp_info, pixelsOffset - 54);
+    
     delete[] temp_info;
 }
 
@@ -80,7 +81,7 @@ std::vector<std::vector<double>> get_data_from_txt(std::ifstream &file)
 }
 
 // Обратное преобразование Хаара
-void inverse_haar(std::string INPUT_PATH)
+void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, const int level)
 {
     std::ifstream haar_component(INPUT_PATH, std::ios::binary);
     if (!(haar_component.is_open()))
@@ -100,7 +101,6 @@ void inverse_haar(std::string INPUT_PATH)
     colorsChannels = fileInfoHeader.biBitCount / 8;
     width = fileInfoHeader.biWidth;
     height = fileInfoHeader.biHeight;
-    // row_size = std::floor((fileInfoHeader.biBitCount * width + 31) / 32) * 4;
     new_row_size = std::floor((fileInfoHeader.biBitCount * 2 * width + 31) / 32) * 4;
 
     fileInfoHeader.biWidth *= 2;
@@ -122,25 +122,25 @@ void inverse_haar(std::string INPUT_PATH)
                   << std::endl;
 
         std::cout << "Getting LL_component data ..." << std::endl;
-        std::ifstream LL_txt_file("txt_data/LL_data_" + std::to_string(k) + ".txt");
+        std::ifstream LL_txt_file(TXT_DATA_DIR_PATH + "LL_data_" + std::to_string(k) + ".txt");
         LL_data.push_back(get_data_from_txt(LL_txt_file));
         std::cout << "LL_component data received!" << std::endl
                   << std::endl;
 
         std::cout << "Getting LH_component data ..." << std::endl;
-        std::ifstream LH_txt_file("txt_data/LH_data_" + std::to_string(k) + ".txt");
+        std::ifstream LH_txt_file(TXT_DATA_DIR_PATH + "LH_data_" + std::to_string(k) + ".txt");
         LH_data.push_back(get_data_from_txt(LH_txt_file));
         std::cout << "LH_component data received!" << std::endl
                   << std::endl;
 
         std::cout << "Getting HL_component data ..." << std::endl;
-        std::ifstream HL_txt_file("txt_data/HL_data_" + std::to_string(k) + ".txt");
+        std::ifstream HL_txt_file(TXT_DATA_DIR_PATH + "HL_data_" + std::to_string(k) + ".txt");
         HL_data.push_back(get_data_from_txt(HL_txt_file));
         std::cout << "HL_component data received!" << std::endl
                   << std::endl;
 
         std::cout << "Getting HH_component data ..." << std::endl;
-        std::ifstream HH_txt_file("txt_data/HH_data_" + std::to_string(k) + ".txt");
+        std::ifstream HH_txt_file(TXT_DATA_DIR_PATH + "HH_data_" + std::to_string(k) + ".txt");
         HH_data.push_back(get_data_from_txt(HH_txt_file));
         std::cout << "HH_component data received!" << std::endl
                   << std::endl;
@@ -182,13 +182,47 @@ void inverse_haar(std::string INPUT_PATH)
 }
 
 // Прямое преобразование Хаара
-void haar(
-    std::ofstream &output_LL,
-    std::ofstream &output_LH,
-    std::ofstream &output_HL,
-    std::ofstream &output_HH,
-    const std::vector<char> &pixels)
+void haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, const int level)
 {
+
+    std::ifstream input_file(INPUT_PATH, std::ios::binary);
+    if (!(input_file.is_open()))
+    {
+        std::cout << "Can't open input_file";
+        input_file.close();
+        exit(1);
+    }
+
+    BITMAPFILEHEADER fileHeader;
+    input_file.read((char *)&fileHeader, sizeof(fileHeader));
+
+    BITMAPINFOHEADER fileInfoHeader;
+    input_file.read((char *)&fileInfoHeader, sizeof(fileInfoHeader));
+
+    pixelsOffset = fileHeader.bfOffBits;
+    colorsChannels = fileInfoHeader.biBitCount / 8;
+    width = fileInfoHeader.biWidth;
+    height = fileInfoHeader.biHeight;
+    row_size = std::floor((fileInfoHeader.biBitCount * width + 31) / 32) * 4;
+    new_row_size = std::floor((fileInfoHeader.biBitCount * (width / 2) + 31) / 32) * 4;
+
+    fileInfoHeader.biWidth /= 2;
+    fileInfoHeader.biHeight /= 2;
+
+    std::ofstream output_LL("4_components/LL.bmp", std::ios::binary);
+    std::ofstream output_LH("4_components/LH.bmp", std::ios::binary);
+    std::ofstream output_HL("4_components/HL.bmp", std::ios::binary);
+    std::ofstream output_HH("4_components/HH.bmp", std::ios::binary);
+
+    writeHeader(input_file, output_LL, fileHeader, fileInfoHeader);
+    writeHeader(input_file, output_LH, fileHeader, fileInfoHeader);
+    writeHeader(input_file, output_HL, fileHeader, fileInfoHeader);
+    writeHeader(input_file, output_HH, fileHeader, fileInfoHeader);
+
+    std::vector<char> pixels(row_size * height + width * colorsChannels);
+    input_file.read(pixels.data(), row_size * height + width * colorsChannels);
+
+    input_file.close();
 
     std::vector<std::shared_ptr<std::ofstream>> LL_data;
     std::vector<std::shared_ptr<std::ofstream>> LH_data;
@@ -197,10 +231,10 @@ void haar(
 
     for (int k = 1; k < colorsChannels + 1; ++k)
     {
-        auto LL_k = std::make_shared<std::ofstream>("txt_data/LL_data_" + std::to_string(k) + ".txt");
-        auto LH_k = std::make_shared<std::ofstream>("txt_data/LH_data_" + std::to_string(k) + ".txt");
-        auto HL_k = std::make_shared<std::ofstream>("txt_data/HL_data_" + std::to_string(k) + ".txt");
-        auto HH_k = std::make_shared<std::ofstream>("txt_data/HH_data_" + std::to_string(k) + ".txt");
+        auto LL_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "LL_data_" + std::to_string(k) + ".txt");
+        auto LH_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "LH_data_" + std::to_string(k) + ".txt");
+        auto HL_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "HL_data_" + std::to_string(k) + ".txt");
+        auto HH_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "HH_data_" + std::to_string(k) + ".txt");
 
         LL_data.push_back(LL_k);
         LH_data.push_back(LH_k);
@@ -269,51 +303,6 @@ void haar(
     output_LH.close();
     output_HL.close();
     output_HH.close();
-}
-
-// Подготовка к прямому преобразованию Хаара
-void run_transform(const std::string INPUT_PATH)
-{
-    std::ifstream input_file(INPUT_PATH, std::ios::binary);
-    if (!(input_file.is_open()))
-    {
-        std::cout << "Can't open input_file";
-        input_file.close();
-        exit(1);
-    }
-
-    BITMAPFILEHEADER fileHeader;
-    input_file.read((char *)&fileHeader, sizeof(fileHeader));
-
-    BITMAPINFOHEADER fileInfoHeader;
-    input_file.read((char *)&fileInfoHeader, sizeof(fileInfoHeader));
-
-    pixelsOffset = fileHeader.bfOffBits;
-    colorsChannels = fileInfoHeader.biBitCount / 8;
-    width = fileInfoHeader.biWidth;
-    height = fileInfoHeader.biHeight;
-    row_size = std::floor((fileInfoHeader.biBitCount * width + 31) / 32) * 4;
-    new_row_size = std::floor((fileInfoHeader.biBitCount * (width / 2) + 31) / 32) * 4;
-
-    fileInfoHeader.biWidth /= 2;
-    fileInfoHeader.biHeight /= 2;
-
-    std::ofstream output_LL("4_components/LL.bmp", std::ios::binary);
-    std::ofstream output_LH("4_components/LH.bmp", std::ios::binary);
-    std::ofstream output_HL("4_components/HL.bmp", std::ios::binary);
-    std::ofstream output_HH("4_components/HH.bmp", std::ios::binary);
-
-    writeHeader(input_file, output_LL, fileHeader, fileInfoHeader);
-    writeHeader(input_file, output_LH, fileHeader, fileInfoHeader);
-    writeHeader(input_file, output_HL, fileHeader, fileInfoHeader);
-    writeHeader(input_file, output_HH, fileHeader, fileInfoHeader);
-
-    std::vector<char> pixels(row_size * height + width * colorsChannels);
-    input_file.read(pixels.data(), row_size * height + width * colorsChannels);
-
-    input_file.close();
-
-    haar(output_LL, output_LH, output_HL, output_HH, pixels);
 
     std::cout << "The direct conversion has been completed successfully!" << std::endl;
 }
@@ -330,7 +319,13 @@ int main(int argc, char *argv[])
         std::cout << "Write path to the bmp file: " << std::endl;
         std::string INPUT_PATH;
         std::cin >> INPUT_PATH;
-        run_transform(INPUT_PATH);
+
+        std::cout << "Write level transform" << std::endl;
+        int level_transform;
+        std::cin >> level_transform;
+
+        std::string DIR_PATH = "txt_data_" + std::to_string(level_transform);
+        haar(INPUT_PATH, DIR_PATH, level_transform);
     }
 
     else if (to_do == 2)
@@ -338,7 +333,13 @@ int main(int argc, char *argv[])
         std::cout << "Write path to the one of the haar transform components file" << std::endl;
         std::string INPUT_PATH;
         std::cin >> INPUT_PATH;
-        inverse_haar(INPUT_PATH);
+
+        std::cout << "Write level transform" << std::endl;
+        int level_transform;
+        std::cin >> level_transform;
+
+        std::string DIR_PATH = "txt_data_" + std::to_string(level_transform);
+        inverse_haar(INPUT_PATH, DIR_PATH, level_transform);
     }
 
     else
