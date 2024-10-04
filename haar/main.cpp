@@ -53,7 +53,7 @@ void writeHeader(std::ifstream &input_file, std::ofstream &output_file, BITMAPFI
     input_file.seekg(54);
     input_file.read(temp_info, pixelsOffset - 54);
     output_file.write(temp_info, pixelsOffset - 54);
-    
+
     delete[] temp_info;
 }
 
@@ -80,22 +80,13 @@ std::vector<std::vector<double>> get_data_from_txt(std::ifstream &file)
     return data;
 }
 
-// Обратное преобразование Хаара
-void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, const int level)
+void write_inverse_haar_header(std::ifstream &input_file, std::ofstream &output_file)
 {
-    std::ifstream haar_component(INPUT_PATH, std::ios::binary);
-    if (!(haar_component.is_open()))
-    {
-        std::cout << "Can't open input_file";
-        haar_component.close();
-        exit(1);
-    }
-
     BITMAPFILEHEADER fileHeader;
-    haar_component.read((char *)&fileHeader, sizeof(fileHeader));
+    input_file.read((char *)&fileHeader, sizeof(fileHeader));
 
     BITMAPINFOHEADER fileInfoHeader;
-    haar_component.read((char *)&fileInfoHeader, sizeof(fileInfoHeader));
+    input_file.read((char *)&fileInfoHeader, sizeof(fileInfoHeader));
 
     pixelsOffset = fileHeader.bfOffBits;
     colorsChannels = fileInfoHeader.biBitCount / 8;
@@ -106,10 +97,12 @@ void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR
     fileInfoHeader.biWidth *= 2;
     fileInfoHeader.biHeight *= 2;
 
-    std::ofstream inverse_result("inverse_result.bmp", std::ios::binary);
-    writeHeader(haar_component, inverse_result, fileHeader, fileInfoHeader);
-    std::vector<char> pixels(new_row_size * 2 * height + 2 * width * colorsChannels);
+    writeHeader(input_file, output_file, fileHeader, fileInfoHeader);
+}
 
+// Запись данных из текстовых файлов компонентов в соответствующие вектора
+std::vector<std::vector<std::vector<std::vector<double>>>> read_txt_data(const std::string &TXT_DATA_DIR_PATH)
+{
     std::vector<std::vector<std::vector<double>>> LL_data;
     std::vector<std::vector<std::vector<double>>> LH_data;
     std::vector<std::vector<std::vector<double>>> HL_data;
@@ -149,6 +142,31 @@ void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR
     std::cout << "All data has been uploaded successfully!" << std::endl
               << std::endl;
 
+    return {LL_data, LH_data, HL_data, HH_data};
+}
+
+// Обратное преобразование Хаара
+void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH)
+{
+    std::ifstream haar_component(INPUT_PATH, std::ios::binary);
+    if (!(haar_component.is_open()))
+    {
+        std::cout << "Can't open input_file";
+        haar_component.close();
+        exit(1);
+    }
+
+    std::ofstream inverse_result("inverse_result.bmp", std::ios::binary);
+
+    std::vector<char> pixels(new_row_size * 2 * height + 2 * width * colorsChannels);
+
+    std::vector<std::vector<std::vector<std::vector<double>>>> data_from_txt = read_txt_data(TXT_DATA_DIR_PATH);
+
+    std::vector<std::vector<std::vector<double>>> LL_data = data_from_txt[0];
+    std::vector<std::vector<std::vector<double>>> LH_data = data_from_txt[1];
+    std::vector<std::vector<std::vector<double>>> HL_data = data_from_txt[2];
+    std::vector<std::vector<std::vector<double>>> HH_data = data_from_txt[3];
+
     // Применение алгоритма
     for (int i = 0; i < height; i++)
     {
@@ -181,18 +199,13 @@ void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR
     inverse_result.close();
 }
 
-// Прямое преобразование Хаара
-void haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, const int level)
+std::vector<char> write_haar_header(
+    std::ifstream &input_file,
+    std::ofstream &output_LL,
+    std::ofstream &output_LH,
+    std::ofstream &output_HL,
+    std::ofstream &output_HH)
 {
-
-    std::ifstream input_file(INPUT_PATH, std::ios::binary);
-    if (!(input_file.is_open()))
-    {
-        std::cout << "Can't open input_file";
-        input_file.close();
-        exit(1);
-    }
-
     BITMAPFILEHEADER fileHeader;
     input_file.read((char *)&fileHeader, sizeof(fileHeader));
 
@@ -209,11 +222,6 @@ void haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, c
     fileInfoHeader.biWidth /= 2;
     fileInfoHeader.biHeight /= 2;
 
-    std::ofstream output_LL("4_components/LL.bmp", std::ios::binary);
-    std::ofstream output_LH("4_components/LH.bmp", std::ios::binary);
-    std::ofstream output_HL("4_components/HL.bmp", std::ios::binary);
-    std::ofstream output_HH("4_components/HH.bmp", std::ios::binary);
-
     writeHeader(input_file, output_LL, fileHeader, fileInfoHeader);
     writeHeader(input_file, output_LH, fileHeader, fileInfoHeader);
     writeHeader(input_file, output_HL, fileHeader, fileInfoHeader);
@@ -224,6 +232,33 @@ void haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, c
 
     input_file.close();
 
+    return pixels;
+}
+
+// Прямое преобразование Хаара
+void haar(const std::string &INPUT_PATH, const std::string &TXT_DIR_PATH, const std::string &COMPONENTS_DIR_PATH)
+{
+
+    std::ifstream input_file(INPUT_PATH, std::ios::binary);
+    if (!(input_file.is_open()))
+    {
+        std::cout << "Can't open input_file";
+        input_file.close();
+        exit(1);
+    }
+
+    std::ofstream output_LL(COMPONENTS_DIR_PATH + "LL.bmp", std::ios::binary);
+    std::ofstream output_LH(COMPONENTS_DIR_PATH + "LH.bmp", std::ios::binary);
+    std::ofstream output_HL(COMPONENTS_DIR_PATH + "HL.bmp", std::ios::binary);
+    std::ofstream output_HH(COMPONENTS_DIR_PATH + "HH.bmp", std::ios::binary);
+
+    std::vector<char> pixels = write_haar_header(
+        input_file,
+        output_LL,
+        output_LH,
+        output_HL,
+        output_HH);
+
     std::vector<std::shared_ptr<std::ofstream>> LL_data;
     std::vector<std::shared_ptr<std::ofstream>> LH_data;
     std::vector<std::shared_ptr<std::ofstream>> HL_data;
@@ -231,10 +266,10 @@ void haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH, c
 
     for (int k = 1; k < colorsChannels + 1; ++k)
     {
-        auto LL_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "LL_data_" + std::to_string(k) + ".txt");
-        auto LH_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "LH_data_" + std::to_string(k) + ".txt");
-        auto HL_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "HL_data_" + std::to_string(k) + ".txt");
-        auto HH_k = std::make_shared<std::ofstream>(TXT_DATA_DIR_PATH + "HH_data_" + std::to_string(k) + ".txt");
+        auto LL_k = std::make_shared<std::ofstream>(TXT_DIR_PATH + "LL_data_" + std::to_string(k) + ".txt");
+        auto LH_k = std::make_shared<std::ofstream>(TXT_DIR_PATH + "LH_data_" + std::to_string(k) + ".txt");
+        auto HL_k = std::make_shared<std::ofstream>(TXT_DIR_PATH + "HL_data_" + std::to_string(k) + ".txt");
+        auto HH_k = std::make_shared<std::ofstream>(TXT_DIR_PATH + "HH_data_" + std::to_string(k) + ".txt");
 
         LL_data.push_back(LL_k);
         LH_data.push_back(LH_k);
@@ -320,12 +355,35 @@ int main(int argc, char *argv[])
         std::string INPUT_PATH;
         std::cin >> INPUT_PATH;
 
-        std::cout << "Write level transform" << std::endl;
+        std::cout << "Write level transform: 1 or 2" << std::endl;
         int level_transform;
         std::cin >> level_transform;
 
-        std::string DIR_PATH = "txt_data_" + std::to_string(level_transform);
-        haar(INPUT_PATH, DIR_PATH, level_transform);
+        if (level_transform != 1 && level_transform != 2)
+        {
+            std::cout << "Invalid level transform!" << std::endl;
+            return -1;
+        }
+
+        std::string TXT_DIR_PATH = "txt_data_1/";
+        std::string COMPONENTS_DIR_PATH = "4_components_1/";
+        haar(INPUT_PATH, TXT_DIR_PATH, COMPONENTS_DIR_PATH);
+
+        if (level_transform == 2)
+        {
+            std::string TXT_BASE_DIR_PATH = "txt_data_2/";
+            std::string COMPONENTS_BASE_DIR_PATH = "4_components_2/";
+
+            std::vector<std::string> converter = {"LL", "LH", "HL", "HH"};
+
+            for (int i = 1; i <= 4; ++i)
+            {
+                TXT_DIR_PATH = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
+                COMPONENTS_DIR_PATH = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/";
+                INPUT_PATH = converter[i - 1] + ".bmp";
+                haar(INPUT_PATH, TXT_DIR_PATH, COMPONENTS_DIR_PATH);
+            }
+        }
     }
 
     else if (to_do == 2)
@@ -339,7 +397,7 @@ int main(int argc, char *argv[])
         std::cin >> level_transform;
 
         std::string DIR_PATH = "txt_data_" + std::to_string(level_transform);
-        inverse_haar(INPUT_PATH, DIR_PATH, level_transform);
+        inverse_haar(INPUT_PATH, DIR_PATH);
     }
 
     else
