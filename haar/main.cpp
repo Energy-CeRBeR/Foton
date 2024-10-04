@@ -146,7 +146,7 @@ std::vector<std::vector<std::vector<std::vector<double>>>> read_txt_data(const s
 }
 
 // Обратное преобразование Хаара
-void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR_PATH)
+void inverse_haar(const std::string &INPUT_PATH, const std::string &OUTPUT_PATH, const std::string &TXT_DATA_DIR_PATH)
 {
     std::ifstream haar_component(INPUT_PATH, std::ios::binary);
     if (!(haar_component.is_open()))
@@ -156,7 +156,9 @@ void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR
         exit(1);
     }
 
-    std::ofstream inverse_result("inverse_result.bmp", std::ios::binary);
+    std::ofstream inverse_result(OUTPUT_PATH, std::ios::binary);
+
+    write_inverse_haar_header(haar_component, inverse_result);
 
     std::vector<char> pixels(new_row_size * 2 * height + 2 * width * colorsChannels);
 
@@ -193,9 +195,6 @@ void inverse_haar(const std::string &INPUT_PATH, const std::string &TXT_DATA_DIR
     }
 
     inverse_result.write(pixels.data(), new_row_size * 2 * height + 2 * width * colorsChannels);
-
-    std::cout << "The reverse conversion has been completed successfully!" << std::endl;
-
     inverse_result.close();
 }
 
@@ -383,7 +382,7 @@ int main(int argc, char *argv[])
                 INPUT_PATH = COMPONENTS_DIR_PATH_1 + converter[i - 1] + ".bmp";
 
                 haar(INPUT_PATH, TXT_DIR_PATH_2, COMPONENTS_DIR_PATH_2);
-                std::cout << "The direct conversion for " + INPUT_PATH + " level has been completed successfully!\n";
+                std::cout << "The direct conversion for " + INPUT_PATH + " has been completed successfully!\n";
             }
 
             std::cout << "\nThe direct conversion for 2 level has been completed successfully!\n\n";
@@ -392,16 +391,41 @@ int main(int argc, char *argv[])
 
     else if (to_do == 2)
     {
-        std::cout << "Write path to the one of the haar transform components file" << std::endl;
-        std::string INPUT_PATH;
-        std::cin >> INPUT_PATH;
-
         std::cout << "Write level transform" << std::endl;
         int level_transform;
         std::cin >> level_transform;
 
-        std::string DIR_PATH = "txt_data_" + std::to_string(level_transform);
-        inverse_haar(INPUT_PATH, DIR_PATH);
+        if (level_transform != 1 && level_transform != 2)
+        {
+            std::cout << "Invalid level transform!" << std::endl;
+            return -1;
+        }
+
+        std::string TXT_DIR_PATH_1 = "txt_data_1/";
+        std::string COMPONENTS_DIR_PATH_1 = "4_components_1/";
+        std::string INPUT_PATH = COMPONENTS_DIR_PATH_1 + "LL.bmp";
+        std::string OUTPUT_PATH = "restored_base_file.bmp";
+
+        inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_1);
+        std::cout << "The reverse conversion for 1 level has been completed successfully!" << std::endl;
+
+        std::string TXT_BASE_DIR_PATH = "txt_data_2/";
+        std::string COMPONENTS_BASE_DIR_PATH = "4_components_2/";
+
+        std::vector<std::string> converter = {"LL", "LH", "HL", "HH"};
+
+        for (int i = 1; i <= 4; ++i)
+        {
+            std::string TXT_DIR_PATH_2 = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
+            std::string COMPONENTS_DIR_PATH_2 = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/";
+            INPUT_PATH = COMPONENTS_DIR_PATH_2 + converter[i - 1] + ".bmp";
+            std::string OUTPUT_PATH = "restored_" + converter[i - 1] + ".bmp";
+
+            inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_1);
+            std::cout << "The reverse conversion for " + INPUT_PATH + " has been completed successfully!\n";
+        }
+
+        std::cout << "\nThe reverse conversion for 2 level has been completed successfully!\n\n";
     }
 
     else
