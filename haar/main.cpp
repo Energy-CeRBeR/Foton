@@ -338,8 +338,6 @@ void haar(const std::string &INPUT_PATH, const std::string &TXT_DIR_PATH, const 
     output_LH.close();
     output_HL.close();
     output_HH.close();
-
-    std::cout << "The direct conversion has been completed successfully!" << std::endl;
 }
 
 int main(int argc, char *argv[])
@@ -365,9 +363,11 @@ int main(int argc, char *argv[])
             return -1;
         }
 
-        std::string TXT_DIR_PATH = "txt_data_1/";
-        std::string COMPONENTS_DIR_PATH = "4_components_1/";
-        haar(INPUT_PATH, TXT_DIR_PATH, COMPONENTS_DIR_PATH);
+        std::string TXT_DIR_PATH_1 = "txt_data_1/";
+        std::string COMPONENTS_DIR_PATH_1 = "4_components_1/";
+        haar(INPUT_PATH, TXT_DIR_PATH_1, COMPONENTS_DIR_PATH_1);
+
+        std::cout << "The direct conversion for 1 level has been completed successfully!\n\n";
 
         if (level_transform == 2)
         {
@@ -378,11 +378,15 @@ int main(int argc, char *argv[])
 
             for (int i = 1; i <= 4; ++i)
             {
-                TXT_DIR_PATH = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
-                COMPONENTS_DIR_PATH = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/";
-                INPUT_PATH = converter[i - 1] + ".bmp";
-                haar(INPUT_PATH, TXT_DIR_PATH, COMPONENTS_DIR_PATH);
+                std::string TXT_DIR_PATH_2 = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
+                std::string COMPONENTS_DIR_PATH_2 = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/";
+                INPUT_PATH = COMPONENTS_DIR_PATH_1 + converter[i - 1] + ".bmp";
+
+                haar(INPUT_PATH, TXT_DIR_PATH_2, COMPONENTS_DIR_PATH_2);
+                std::cout << "The direct conversion for " + INPUT_PATH + " level has been completed successfully!\n";
             }
+
+            std::cout << "\nThe direct conversion for 2 level has been completed successfully!\n\n";
         }
     }
 
