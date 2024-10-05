@@ -417,11 +417,10 @@ int main(int argc, char *argv[])
         for (int i = 1; i <= 4; ++i)
         {
             std::string TXT_DIR_PATH_2 = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
-            std::string COMPONENTS_DIR_PATH_2 = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/";
-            INPUT_PATH = COMPONENTS_DIR_PATH_2 + converter[i - 1] + ".bmp";
+            INPUT_PATH = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/" + "LL.bmp";
             std::string OUTPUT_PATH = "restored_" + converter[i - 1] + ".bmp";
 
-            inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_1);
+            inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_2);
             std::cout << "The reverse conversion for " + INPUT_PATH + " has been completed successfully!\n";
         }
 
