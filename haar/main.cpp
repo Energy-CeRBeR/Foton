@@ -111,36 +111,36 @@ std::vector<std::vector<std::vector<std::vector<double>>>> read_txt_data(const s
     // Чтение данных из текстовых файлов
     for (int k = 1; k < colorsChannels + 1; ++k)
     {
-        std::cout << "Getting " << k << "th image channel components: " << std::endl
-                  << std::endl;
+        // std::cout << "Getting " << k << "th image channel components: " << std::endl
+        //           << std::endl;
 
-        std::cout << "Getting LL_component data ..." << std::endl;
+        // std::cout << "Getting LL_component data ..." << std::endl;
         std::ifstream LL_txt_file(TXT_DATA_DIR_PATH + "LL_data_" + std::to_string(k) + ".txt");
         LL_data.push_back(get_data_from_txt(LL_txt_file));
-        std::cout << "LL_component data received!" << std::endl
-                  << std::endl;
+        // std::cout << "LL_component data received!" << std::endl
+        //           << std::endl;
 
-        std::cout << "Getting LH_component data ..." << std::endl;
+        // std::cout << "Getting LH_component data ..." << std::endl;
         std::ifstream LH_txt_file(TXT_DATA_DIR_PATH + "LH_data_" + std::to_string(k) + ".txt");
         LH_data.push_back(get_data_from_txt(LH_txt_file));
-        std::cout << "LH_component data received!" << std::endl
-                  << std::endl;
+        // std::cout << "LH_component data received!" << std::endl
+        //           << std::endl;
 
-        std::cout << "Getting HL_component data ..." << std::endl;
+        // std::cout << "Getting HL_component data ..." << std::endl;
         std::ifstream HL_txt_file(TXT_DATA_DIR_PATH + "HL_data_" + std::to_string(k) + ".txt");
         HL_data.push_back(get_data_from_txt(HL_txt_file));
-        std::cout << "HL_component data received!" << std::endl
-                  << std::endl;
+        // std::cout << "HL_component data received!" << std::endl
+        //           << std::endl;
 
-        std::cout << "Getting HH_component data ..." << std::endl;
+        // std::cout << "Getting HH_component data ..." << std::endl;
         std::ifstream HH_txt_file(TXT_DATA_DIR_PATH + "HH_data_" + std::to_string(k) + ".txt");
         HH_data.push_back(get_data_from_txt(HH_txt_file));
-        std::cout << "HH_component data received!" << std::endl
-                  << std::endl;
+        // std::cout << "HH_component data received!" << std::endl
+        //           << std::endl;
     }
 
-    std::cout << "All data has been uploaded successfully!" << std::endl
-              << std::endl;
+    // std::cout << "All data has been uploaded successfully!" << std::endl
+    //           << std::endl;
 
     return {LL_data, LH_data, HL_data, HH_data};
 }
@@ -407,24 +407,26 @@ int main(int argc, char *argv[])
         std::string OUTPUT_PATH = "restored_base_file.bmp";
 
         inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_1);
-        std::cout << "The reverse conversion for 1 level has been completed successfully!" << std::endl;
+        std::cout << "The reverse conversion for 1 level has been completed successfully!\n\n";
 
-        std::string TXT_BASE_DIR_PATH = "txt_data_2/";
-        std::string COMPONENTS_BASE_DIR_PATH = "4_components_2/";
-
-        std::vector<std::string> converter = {"LL", "LH", "HL", "HH"};
-
-        for (int i = 1; i <= 4; ++i)
+        if (level_transform == 2)
         {
-            std::string TXT_DIR_PATH_2 = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
-            INPUT_PATH = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/" + "LL.bmp";
-            std::string OUTPUT_PATH = "restored_" + converter[i - 1] + ".bmp";
+            std::string TXT_BASE_DIR_PATH = "txt_data_2/";
+            std::string COMPONENTS_BASE_DIR_PATH = "4_components_2/";
 
-            inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_2);
-            std::cout << "The reverse conversion for " + INPUT_PATH + " has been completed successfully!\n";
+            std::vector<std::string> converter = {"LL", "LH", "HL", "HH"};
+            for (int i = 1; i <= 4; ++i)
+            {
+                std::string TXT_DIR_PATH_2 = TXT_BASE_DIR_PATH + converter[i - 1] + "/";
+                INPUT_PATH = COMPONENTS_BASE_DIR_PATH + converter[i - 1] + "/" + "LL.bmp";
+                std::string OUTPUT_PATH = "restored_" + converter[i - 1] + ".bmp";
+
+                inverse_haar(INPUT_PATH, OUTPUT_PATH, TXT_DIR_PATH_2);
+                std::cout << "The reverse conversion for " + TXT_BASE_DIR_PATH + converter[i - 1] + " has been completed successfully!\n";
+            }
+
+            std::cout << "\nThe reverse conversion for 2 level has been completed successfully!\n\n";
         }
-
-        std::cout << "\nThe reverse conversion for 2 level has been completed successfully!\n\n";
     }
 
     else
