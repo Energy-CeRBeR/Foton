@@ -136,7 +136,7 @@ void medianFilterTXT(std::string &DIR_PATH, const std::string &COMPONENT_NAME)
             for (int a = i - k / 2; a <= i + k / 2; a++)
                 for (int b = j - k / 2; b <= j + k / 2; b++)
                     for (int c = 0; c < colorsChannels; c++)
-                        neighborhood[c].push_back(abs(pixels[c][a + k / 2][b + k / 2]));
+                        neighborhood[c].push_back(pixels[c][a + k / 2][b + k / 2]);
 
             for (int c = 0; c < colorsChannels; c++)
             {
