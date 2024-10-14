@@ -81,6 +81,7 @@ std::vector<std::vector<std::vector<double>>> createPixelsVector(const std::vect
 
 std::vector<std::vector<double>> get_data_from_txt(const std::string PATH)
 {
+    std::cout << PATH << std::endl;
     std::ifstream file(PATH);
     if (!file.is_open())
     {
@@ -108,8 +109,43 @@ std::vector<std::vector<double>> get_data_from_txt(const std::string PATH)
     return data;
 }
 
-void medianFilterTXT(std::string &DIR_PATH, const std::string &COMPONENT_NAME)
+void medianFilterTXT(std::string &DIR_PATH, const std::string &COMPONENT_NAME, const std::string &INPUT_PATH, const std::string &OUTPUT_PATH)
 {
+
+    std::ifstream input_file(INPUT_PATH, std::ios::binary);
+    if (!(input_file.is_open()))
+    {
+        std::cout << "Can't open input_file";
+        input_file.close();
+        exit(1);
+    }
+
+    BITMAPFILEHEADER fileHeader;
+    input_file.read((char *)&fileHeader, sizeof(fileHeader));
+
+    BITMAPINFOHEADER fileInfoHeader;
+    input_file.read((char *)&fileInfoHeader, sizeof(fileInfoHeader));
+
+    int pixelsOffset = fileHeader.bfOffBits;
+    int colorsChannels = fileInfoHeader.biBitCount / 8;
+    int width2 = fileInfoHeader.biWidth;
+    int height2 = fileInfoHeader.biHeight;
+    int row_size = std::floor((fileInfoHeader.biBitCount * width2 + 31) / 32) * 4;
+
+    char *temp_info = new char[pixelsOffset - 54];
+    input_file.seekg(54);
+    input_file.read(temp_info, pixelsOffset - 54);
+    input_file.close();
+
+    std::ofstream output_file(OUTPUT_PATH, std::ios::binary);
+    output_file.write((char *)&fileHeader, sizeof(fileHeader));
+    output_file.write((char *)&fileInfoHeader, sizeof(fileInfoHeader));
+
+    output_file.write(temp_info, pixelsOffset - 54);
+    delete[] temp_info;
+
+    std::vector<char> output_pixels(row_size * height2 + width2 * colorsChannels);
+
     std::vector<std::vector<std::vector<double>>> input_data;
     std::vector<std::shared_ptr<std::ofstream>> output_data;
     for (int c = 1; c <= colorsChannels; ++c)
@@ -142,6 +178,7 @@ void medianFilterTXT(std::string &DIR_PATH, const std::string &COMPONENT_NAME)
             {
                 std::sort(neighborhood[c].begin(), neighborhood[c].end());
                 new_pixels[c][i][j] = neighborhood[c][neighborhood[c].size() / 2];
+                output_pixels[i * row_size + j * colorsChannels + c] = abs(neighborhood[c][neighborhood[c].size() / 2]);
                 *output_data[c] << neighborhood[c][neighborhood[c].size() / 2] << " ";
             }
         }
@@ -153,12 +190,15 @@ void medianFilterTXT(std::string &DIR_PATH, const std::string &COMPONENT_NAME)
     for (int c = 0; c < colorsChannels; ++c)
         output_data[c]->close();
 
+    output_file.write(output_pixels.data(), row_size * height + width * colorsChannels);
+    output_file.close();
+
     std::cout << "The application of the median filter to the text data was successful!\n";
 }
 
 int main(int argc, char *argv[])
 {
-    if (argc < 5)
+    if (argc < 7)
     {
         std::cout << "Enter the PATH to dir with .txt file, component name (LL, LH, HL or HH), num of colors channels and the scanning window size k";
         return 1;
@@ -168,10 +208,12 @@ int main(int argc, char *argv[])
     std::string COMPONENT_NAME = argv[2];
     std::string str_colors_channels = argv[3];
     std::string str_k = argv[4];
+    std::string INPUT_PATH = argv[5];
+    std::string OUTPUT_PATH = argv[6];
     k = std::stoi(str_k);
     colorsChannels = std::stoi(str_colors_channels);
 
-    medianFilterTXT(DIR_PATH, COMPONENT_NAME);
+    medianFilterTXT(DIR_PATH, COMPONENT_NAME, INPUT_PATH, OUTPUT_PATH);
 
     return 0;
 }

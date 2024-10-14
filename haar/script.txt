@@ -1,0 +1,4 @@
+median_filter.exe c:\Foton\haar\txt_data_1\ HH 4 3 c:\Foton\haar\4_components_1\HH.bmp medianHH.bmp 
+median_filter.exe c:\Foton\haar\txt_data_1\ HL 4 3 c:\Foton\haar\4_components_1\HL.bmp medianHL.bmp 
+median_filter.exe c:\Foton\haar\txt_data_1\ LH 4 3 c:\Foton\haar\4_components_1\LH.bmp medianLH.bmp 
+median_filter.exe c:\Foton\haar\txt_data_1\ LL 4 3 c:\Foton\haar\4_components_1\LL.bmp medianLL.bmp 
