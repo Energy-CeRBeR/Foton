@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 {
     if (argc < 7)
     {
-        std::cout << "Enter the PATH to dir with .txt file, component name (LL, LH, HL or HH), num of colors channels and the scanning window size k";
+        std::cout << "Enter the PATH to dir with .txt file, component name (LL, LH, HL or HH), num of colors channels and the scanning window size k (+ Path to .bmp component and .bmp result)\n";
         return 1;
     }
 
