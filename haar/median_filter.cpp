@@ -81,7 +81,6 @@ std::vector<std::vector<std::vector<double>>> createPixelsVector(const std::vect
 
 std::vector<std::vector<double>> get_data_from_txt(const std::string PATH)
 {
-    std::cout << PATH << std::endl;
     std::ifstream file(PATH);
     if (!file.is_open())
     {
