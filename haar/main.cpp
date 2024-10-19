@@ -235,7 +235,10 @@ std::vector<char> write_haar_header(
 }
 
 // Прямое преобразование Хаара
-void haar(const std::string &INPUT_PATH, const std::string &TXT_DIR_PATH, const std::string &COMPONENTS_DIR_PATH)
+void haar(const std::string &INPUT_PATH,
+          std::string &TXT_PIXELS_DIR_PATH,
+          const std::string &TXT_DIR_PATH,
+          const std::string &COMPONENTS_DIR_PATH)
 {
 
     std::ifstream input_file(INPUT_PATH, std::ios::binary);
@@ -257,6 +260,11 @@ void haar(const std::string &INPUT_PATH, const std::string &TXT_DIR_PATH, const 
         output_LH,
         output_HL,
         output_HH);
+
+    if (TXT_PIXELS_DIR_PATH == "")
+    {
+        TXT_PIXELS_DIR_PATH = "base_txt_data/";
+    }
 
     std::vector<std::shared_ptr<std::ofstream>> LL_data;
     std::vector<std::shared_ptr<std::ofstream>> LH_data;
@@ -364,7 +372,9 @@ int main(int argc, char *argv[])
 
         std::string TXT_DIR_PATH_1 = "txt_data_1/";
         std::string COMPONENTS_DIR_PATH_1 = "4_components_1/";
-        haar(INPUT_PATH, TXT_DIR_PATH_1, COMPONENTS_DIR_PATH_1);
+
+        std::string TXT_PIXELS_DIR_PATH = "";
+        haar(INPUT_PATH, TXT_PIXELS_DIR_PATH, TXT_DIR_PATH_1, COMPONENTS_DIR_PATH_1);
 
         std::cout << "The direct conversion for 1 level has been completed successfully!\n\n";
 
