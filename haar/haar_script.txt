@@ -1,0 +1,6 @@
+2
+c:\Foton\haar\4_components_1\HH.bmp
+c:\Foton\haar\txt_data_1\
+c:\Foton\haar\txt_data_2\HH\
+c:\Foton\haar\4_components_2\HH\
+HH

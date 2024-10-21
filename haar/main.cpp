@@ -117,6 +117,7 @@ std::vector<std::vector<std::vector<double>>> read_txt_data(
         std::ifstream txt_file(TXT_DATA_DIR_PATH + COMPONENT_NAME + "_data_" + std::to_string(k) + ".txt");
         data.push_back(get_data_from_txt(txt_file));
     }
+    std::cout << "The components have been loaded successfully!\n";
 
     return data;
 }
@@ -268,12 +269,17 @@ void haar(const std::string &INPUT_PATH,
     std::vector<char> HL_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
     std::vector<char> HH_pixels(new_row_size * (height / 2) + (width / 2) * colorsChannels);
 
-    for (int i = 0; i < height; i += 2)
+    std::cout << txt_data[0].size() << std::endl;
+    // std::cout << height << "" << txt_data[0].size() << " " << width << " " << txt_data[0][0].size() << std::endl;
+
+    for (int i = 0; i < height - 1; i += 2)
     {
-        for (int j = 0; j < width; j += 2)
+        for (int j = 0; j < width - 1; j += 2)
         {
             for (int k = 0; k < colorsChannels; k++)
             {
+                // std::cout << "first " << i << " " << j << " " << k << " " << height << " " << width << " " << colorsChannels << "\n";
+
                 // double a = (int)(unsigned char)pixels[i * row_size + j * colorsChannels + k];
                 // double b = (int)(unsigned char)pixels[i * row_size + (j + 1) * colorsChannels + k];
                 // double c = (int)(unsigned char)pixels[(i + 1) * row_size + j * colorsChannels + k];
@@ -283,21 +289,27 @@ void haar(const std::string &INPUT_PATH,
                 double b = txt_data[k][i][j + 1];
                 double c = txt_data[k][i + 1][j];
                 double d = txt_data[k][i + 1][j + 1];
+                // std::cout << "HERE1\n";
 
                 double LL = (a + b + c + d) / 4.0;
                 double LH = b - a;
                 double HL = c - a;
                 double HH = d - a;
+                // std::cout << "HERE2\n";
 
                 *LL_OUT_data[k] << LL << " ";
                 *LH_OUT_data[k] << LH << " ";
                 *HL_OUT_data[k] << HL << " ";
                 *HH_OUT_data[k] << HH << " ";
+                // std::cout << "HERE3\n";
 
                 LL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(round(fabs(LL)));
                 LH_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(round(fabs(LH)));
                 HL_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(round(fabs(HL)));
                 HH_pixels[(i / 2) * new_row_size + (j / 2) * colorsChannels + k] = static_cast<char>(round(fabs(HH)));
+                // std::cout << "HERE4\n";
+
+                // std::cout << "second " << i << " " << j << " " << k << " " << height << " " << width << " " << colorsChannels << "\n";
             }
         }
 
@@ -318,10 +330,14 @@ void haar(const std::string &INPUT_PATH,
         HH_OUT_data[k]->close();
     }
 
+    std::cout << "HERE!" << std::endl;
+
     output_LL.write(LL_pixels.data(), new_row_size * (height / 2) + (width / 2) * colorsChannels);
     output_LH.write(LH_pixels.data(), new_row_size * (height / 2) + (width / 2) * colorsChannels);
     output_HL.write(HL_pixels.data(), new_row_size * (height / 2) + (width / 2) * colorsChannels);
     output_HH.write(HH_pixels.data(), new_row_size * (height / 2) + (width / 2) * colorsChannels);
+
+    std::cout << "HERE2!" << std::endl;
 
     output_LL.close();
     output_LH.close();
@@ -427,7 +443,7 @@ int main(int argc, char *argv[])
 
         haar(INPUT_PATH, TXT_DIR_IN_PATH, COMPONENT_NAME, TXT_DIR_OUT_PATH, COMPONENTS_DIR_PATH);
 
-        std::cout << "The direct conversion for 1 level has been completed successfully!\n";
+        std::cout << "The direct conversion  has been completed successfully!\n";
     }
 
     else if (to_do == 3)
