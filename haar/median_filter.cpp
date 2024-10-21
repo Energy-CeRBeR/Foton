@@ -142,6 +142,7 @@ void medianFilterTXT(std::string &DIR_PATH, const std::string &COMPONENT_NAME, c
 
     output_file.write(temp_info, pixelsOffset - 54);
     delete[] temp_info;
+    
 
     std::vector<char> output_pixels(row_size * height2 + width2 * colorsChannels);
 
